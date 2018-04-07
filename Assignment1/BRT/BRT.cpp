@@ -99,7 +99,13 @@ void BRT::clear(BRT::Node *a_root) {
 
         Change the node's color
         def (Format the node):
-            if()
+            if(Node->left is red)
+                rotateLeft(node);
+            if(Node->left, leftNode->left is red):
+              node = rotateRight(node);
+            if(node->right , node->left is red):
+                rotateMiddle(node);
+            
 
 
 */
@@ -111,6 +117,31 @@ void BRT::insert(const T &ele) {
         this->root = new Node(ele);
         this->root->set_red(false);
     }
+    Node *prev_node;
+    while(1) {
+        if(node.key == ele)
+            return;
+        else if(node.key > ele) {
+            
+            if(node->right==nullptr) {
+                node->right = new Node(ele);
+                continue;
+            }
+            prev_node = node;
+            node = node->right;
+        }
+        else if(node.key < ele) {
+            
+            if(node->left==nullptr) {
+                node->left = new Node(ele);
+                continue;
+            }
+            prev_node = node;
+            node = node->left;
+        }
+    }
+    node *prev_node;
+    if()
 }
 
 // ────────────────────────────────────────────────────────────────────────────────
@@ -141,6 +172,7 @@ BRT::Node *BRT::Node::rotateLeft(Node *a_node) {
     return tmp_right; 
 }
 
+
 BRT::Node *BRT::Node::rotateRight(Node *a_node) {
     Node *tmp_left = a_node->left;
     a_node->left = tmp_left->right;
@@ -151,3 +183,13 @@ BRT::Node *BRT::Node::rotateRight(Node *a_node) {
     return tmp_left;
 }
 
+/*
+* To make a 4-Node to be a 3-Node
+*/
+BRT::Node *BRT::Node::rotateMiddle(Node *a_node) {
+    // Just convert the color
+    a_node->left.set_red(false);
+    a_node->right.set_red(false);
+    a_node.set_red(true);
+    return a_node;
+}

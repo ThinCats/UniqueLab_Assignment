@@ -45,7 +45,8 @@ private:
         //rotateLeft
         Node *rotateLeft(Node *a_node);
         Node *rotateRight(Node *a_node);
-        
+        Node *rotateMiddle(Node *a_node);
+
         Node *left;
         Node *right;
         T key;
