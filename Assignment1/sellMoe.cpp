@@ -3,11 +3,11 @@
 //
 
 /*
-    def sellMoe(plist[], days):
+    def SellMoe(plist[], days):
         set F[days-1][days-1];
         for i=0 to days:
             for v=1 to i:
-                F[i, v] = max(F[i-1, v-1]-plist[i], F[i-1, v+1]+plist[i])
+                F[i, v] = Max(F[i-1, v-1]-plist[i], F[i-1, v+1]+plist[i])
         return F[days-1, 0]
 
 */
@@ -18,11 +18,14 @@
 
 using namespace std;
 
-int max(int a, int b) {
+int Max(int a, int b) {
     return a>b?a:b;
 }
 
-int sellMoe(int plist[], int days) {
+/**
+ * Core Function
+ */
+int SellMoe(int plist[], int days) {
     int F[days][days];
     F[0][0] = 0;
     F[0][1] = -plist[0];
@@ -40,7 +43,7 @@ int sellMoe(int plist[], int days) {
             else if(v + 1  > i )  // 爆仓了 (对应i-1的仓数最大为i)
                 F[i][v] =  F[i-1][v-1] - plist[i];
             else
-                F[i][v] = max(F[i-1][v-1]-plist[i], F[i-1][v+1]+plist[i]);
+                F[i][v] = Max(F[i-1][v-1]-plist[i], F[i-1][v+1]+plist[i]);
             //cout << "i = " << i << " v= " << v << " F[i][v] " << F[i][v] << " F[i-1][v-1] " << F[i-1][v-1] << " F[i-1][v+1] " << F[i-1][v+1] <<endl;
         }
     }
@@ -53,7 +56,7 @@ int sellMoe(int plist[], int days) {
         cout << endl;
     }
 */
-    //find MAX
+    //find Max
     int max = 0;
     for(int i=1; i < days-1;i++) {
         if(F[days-1][max] < F[days-1][i])
@@ -62,14 +65,16 @@ int sellMoe(int plist[], int days) {
     return F[days-1][max];
 }
 
-int listLen(int plist[]) {
+
+
+int ListLen(int plist[]) {
     int len = 0;
     while(*(plist++) != -1)
         len ++;
     return len;
 }
 
-int *str2int(char *s) {
+int *Str2int(char *s) {
     static int plist[1001];
     int *tmp = plist;
     while(*s != '\0') {
@@ -90,9 +95,9 @@ int main(void) {
     //int plist[] = {92, 25, 43, 77, 76, 20, 69, 13, 49, 96, 62, 41, 6, 49, 72, -1};
     char s[1001];
     cin.getline(s, 1000);
-    int *tmp = str2int(s);
-    //cout << sellMoe(plist, sizeof(plist)/sizeof(plist[0])) << endl;
-    cout << tmp[0] << " " << tmp[1] << endl;
-    cout << sellMoe(tmp, listLen(tmp)) << endl;
+    int *tmp = Str2int(s);
+    //cout << SellMoe(plist, sizeof(plist)/sizeof(plist[0])) << endl;
+    //cout << tmp[0] << " " << tmp[1] << endl;
+    cout << SellMoe(tmp, ListLen(tmp)) << endl;
     return 0;
 }
