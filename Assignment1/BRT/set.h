@@ -22,7 +22,8 @@ public:
     void erase(const T& element);
 
     // An override will be at private
-    void clear() { clear(this->root); this->root = nullptr; }; //V
+    void clear() { this->tree_size = 0; 
+    clear(this->root); this->root = nullptr; }; //V
 
     size_t size();
 private:
@@ -56,7 +57,6 @@ private:
         Node *left_ = nullptr;
         Node *right_ = nullptr;
         T key;
-        size_t sub_size = 0;
     private:
         bool red = false;
     };

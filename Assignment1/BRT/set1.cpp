@@ -1,13 +1,12 @@
 #include "set.h"
 
-#define DEBUG
+//#define DEBUG
 #ifdef DEBUG
 #include <iostream>
 #endif //DEBUG
 // ─── FOR CLASS Set ──────────────────────────────────────────────────────────────
 
 // ─── FOR PUBLIC ─────────────────────────────────────────────────────────────────
-
 
 /**
  * Return whether the set contains the element.
@@ -142,13 +141,13 @@ Set::Node* Set::rotates(Node* a_node) {
 }
 
 void Set::insert(const T& ele) {
-    Node* root_tmp = this->root;
+    if(this->count(ele) == 1)
+        return;
     this->root = insert(ele, this->root);
     //Update size
     // If it is efficient insert
     root->set_red(false);
-    if(root_tmp != this->root)
-        tree_size++;
+    tree_size++;
 }
 
 Set::Node* Set::insert(const T& ele, Set::Node* a_node) {
@@ -296,6 +295,7 @@ void Set::erase(const T& element) {
     if(this->count(element) != 1)
         return;
     root = erase(element, root);
+    root->set_red(false);
     tree_size --;
     
     
@@ -309,8 +309,10 @@ Set::Node* Set::erase(const T& ele, Node* a_node) {
     if(cmp == a_node->kSmaller) {
         if(a_node->left_->is_red() == true)
             ;
-        else if(a_node->left_->left_==nullptr)
-            ;
+        else if(a_node->left_->left_==nullptr) {
+            a_node = a_node->moveRedLeft(a_node);
+        }
+            
         else if(a_node->left_->left_->is_red() == true)
             ;
         else 
@@ -322,7 +324,7 @@ Set::Node* Set::erase(const T& ele, Node* a_node) {
         if(a_node->left_==nullptr)
             ;
         else if(a_node->left_->is_red())
-            a_node->rotateRight(a_node);
+            a_node = a_node->rotateRight(a_node);
         
         if(a_node->right_->is_red())
             ;
@@ -343,8 +345,7 @@ Set::Node* Set::erase(const T& ele, Node* a_node) {
             return nullptr;
         }
         else if(a_node->left_ == nullptr) {
-            a_node->key = getMin(a_node->right_)->key;
-            a_node->right_ = deleteMin(a_node->right_);
+            ;
         }
         else {
             a_node->key = getMax(a_node->left_)->key;
@@ -487,29 +488,23 @@ Set::Node* Set::Node::moveRedRight(Node* a_node) {
 
 
 //test
+#ifdef DEBUG
 
 int main(void) {
     Set a;
-    a.insert(1);
-    a.insert(2);
-    
-    
-    for(int i=0;i < 10;i++)
-        a.insert(i);
-    //a.deleteMin();    for(int i=0;i<10;i++)
-    for(int i=0;i < 10;i++)
+    //a.insert(1);
+    //a.insert(2);
+    int j = 1000000;
+    int k; 
+    for(int i=0 ;i < j;i++)
+        a.insert(i + 3.4);
+    for(int i=100;i > 0;i--) {
         a.erase(i*i);
-    for(int i=0;i < 10;i++) {
-        if(a.count(i) != 1)
-            std::cout << i << ": " << "false" << '\n';
     }
-    
-   //a.erase(1);
-    //a.deleteMin();
     std::cout << a.count(1) << '\n';
     std::cout << a.size();
-
 }
+#endif //DEBUG
 int Set::Node::Compare(const T& a_key) const {
 
     int a = (this->key==a_key)?this->kEqual:(this->key<a_key?this->kBigger:this->kSmaller);
