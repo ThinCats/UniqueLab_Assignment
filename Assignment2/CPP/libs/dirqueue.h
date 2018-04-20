@@ -1,6 +1,6 @@
 #ifndef DIR_QUEUE_H
 #define DIR_QUEUE_H
-#include "updatedb_basic.h"
+#include "basic_libs.h"
 
 class DirQueue {
     public:
@@ -19,7 +19,8 @@ class DirQueue {
         Node() = default;
         // sorry for that, because for cooperating with C
         Node(char *a_path): fullpath_(a_path) {
-            priority_ = calPriority(a_path);
+           priority_ = calPriority(a_path);
+           //priority_ = strlen(a_path);    
         };
         
         int getPriority() const {return this->priority_;}

@@ -1,20 +1,7 @@
 #ifndef UPDATEDB_BASIC_H
 #define UPDATEDB_BASIC_H
 
-#include <iostream>
-#include <string>
-#include <queue>
-// For C BASIC
-#include <cstdio>
-#include <cerrno>
-#include <cstdlib>
-#include <cstring>
-
-extern "C" {
-// For POSIX API
-#include <dirent.h>
-#include <sys/stat.h>
-}
+#include "basic_libs.h"
 // error_print functios
 #include "error_functions.h"
 
@@ -30,8 +17,5 @@ int iterFile(std::string &dirpath, DirQueue &a_dirqueue);
 int iterDirs(char *rootdir);
 
 
-
-//For priority calculation
-int priority(char *filename);
 
 #endif

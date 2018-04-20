@@ -18,6 +18,8 @@ if (USE_MYMATH)
   # set (EXTRA_LIBS ${EXTRA_LIBS} )
   set (EXTRA_LIBS ${EXTRA_LIBS} updatedb_basic)
   set (EXTRA_LIBS ${EXTRA_LIBS} error_functions)
+  set (EXTRA_LIBS ${EXTRA_LIBS} dirqueue)
+
   
 endif (USE_MYMATH)
 # add the executable
