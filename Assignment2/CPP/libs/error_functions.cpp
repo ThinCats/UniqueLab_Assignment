@@ -5,12 +5,14 @@ void outputError(int err, const char *format, va_list ap) {
     const int BUF_SIZE = 500;
     char userMsg[BUF_SIZE], buf[BUF_SIZE], errText[BUF_SIZE];
 
-    snprintf(userMsg, BUF_SIZE, format, ap);
+    // For variant arguments
+    vsnprintf(userMsg, BUF_SIZE, format, ap);
 
     // Refer to http://man7.org/tlpi/code/online/diff/lib/error_functions.c.html for his ename file
     // To print out error message
     snprintf(errText, BUF_SIZE, "[%s %s]", (err>0&&err<=MAX_ENAME)?ename[err]:"unknown", strerror(err));
-
+    snprintf(buf, BUF_SIZE, "ERROR%s %s\n", errText, userMsg);
+    fputs(buf, stderr); 
     fflush(stdout);
     fflush(stderr);
     

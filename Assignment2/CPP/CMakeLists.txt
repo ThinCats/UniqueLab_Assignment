@@ -21,5 +21,5 @@ if (USE_MYMATH)
   
 endif (USE_MYMATH)
 # add the executable
-add_executable (updatedb_basic main.c)
-target_link_libraries (updatedb_basic ${EXTRA_LIBS}) 
+add_executable (updatedb main.cpp)
+target_link_libraries (updatedb ${EXTRA_LIBS}) 
