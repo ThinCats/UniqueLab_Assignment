@@ -1,8 +1,7 @@
 #include "dirqueue.h"
 
 void DirQueue::push(char *path) {
-   Node a_node = Node(path);
-   queue_.push(a_node); 
+   queue_.push(Node(path)); 
 }
 
 bool DirQueue::empty() {
@@ -11,14 +10,13 @@ bool DirQueue::empty() {
 
 std::string &DirQueue::top() {
     Node a_node = queue_.top();
-    static std::string a_path = a_node.getPath();
+    static std::string a_path;
+    a_path = a_node.getPath();
     return a_path;
 }
 
 void DirQueue::pop() {
-    queue_.pop();
-    Node a_node = queue_.top();
-    std::cout << a_node.getPath();
+    this->queue_.pop();
 }
 
 
