@@ -27,7 +27,7 @@ int iterFile(string &dirpath, DirQueue &a_dirqueue) {
     while(true) {
         ent_current = readdir(dirp);
         if(ent_current == nullptr) {
-            std::cout << "end of dir\n";
+            //std::cout << "end of dir\n";
             break;
         }
         //ignore . and ..
@@ -48,10 +48,9 @@ int iterFile(string &dirpath, DirQueue &a_dirqueue) {
         } else {
             if(S_ISDIR(statbuf.st_mode)) {
                 // TODO: DO SOMETHING
-
+                // Put it in a queue in order to avoid recurisive
+                a_dirqueue.push(ent_current->d_name);
                 //test:
- cout << "\n" << full_file_path << "\n";
-                cout << "It's a dir" << "\n";
             }
             else if(S_ISREG(statbuf.st_mode)) {
                 // TODO: DO SOMTHING
@@ -64,11 +63,24 @@ int iterFile(string &dirpath, DirQueue &a_dirqueue) {
 
     // Error detactions:
     if(errno != 0) {
-        errExit("read dir");
+        errMsg("read dir");
     }
     // Close dir
     if(closedir(dirp) == -1) {
         errMsg("Close dir falied");
     }
 
+}
+
+int iterDirs(std::string &parent_path) {
+    DirQueue dir_queue;
+
+    iterFile(parent_path, dir_queue);
+    while(!dir_queue.empty()) {
+        std::string path = dir_queue.top();
+        dir_queue.pop();
+        path = parent_path + "/" + path;
+        std::cout << path << std::endl;
+        iterDirs(path);
+    }
 }

@@ -14,7 +14,7 @@ int iterFile(std::string &dirpath, DirQueue &a_dirqueue);
 
 // For iterate the subdirs
 // read from a queue(or sort) and then call iterFile()
-int iterDirs(char *rootdir);
+int iterDirs(std::string &parent_path);
 
 
 

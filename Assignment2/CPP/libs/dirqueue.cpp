@@ -23,13 +23,17 @@ void DirQueue::pop() {
 // For sub-node
 int DirQueue::Node::calPriority(char *a_path) {
     int len = strlen(a_path);
+    int sum = 0;
     if(len <= 0)
         return 0;
-    // only 1 word
-    else if(len <= 1)
-        return a_path[0]*10000;
-    else if(len <= 2)
-        return a_path[0]*10000 + a_path[1]*100;
-    else
-        return a_path[0]*10000 + a_path[1]*100 + a_path[2];
+    else {
+        sum += a_path[0] * 10000;
+        // At least 1;
+        //sum += a_path[0]=='.'?0:a_path[0]*10000;
+        if(len >= 2)
+            sum += a_path[1]*100;
+        else 
+            sum += a_path[2];
+    }
+    return sum;
 }

@@ -13,7 +13,8 @@ class DirQueue {
     // The node contains the dirpath and its priority
     class Node {
         friend bool operator < (const  Node &node1, const Node &node2) {
-            return node1.priority_ < node2.priority_;
+            // TO let smaller first.
+            return node1.priority_ > node2.priority_;
         }
         public:
         Node() = default;
