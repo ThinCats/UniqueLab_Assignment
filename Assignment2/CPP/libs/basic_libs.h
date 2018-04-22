@@ -17,5 +17,6 @@ extern "C" {
 #include <cstdio>
 #include <cstdlib>
 #include <cerrno>
+#include <cctype>
 
 #endif

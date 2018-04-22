@@ -20,7 +20,7 @@ int iterFile(string &dirpath, DirQueue &a_dirqueue) {
     
     dirp = opendir(dirpath_c);
     if(dirp == nullptr) {
-        errMsg("can't read the dir: %s", dirpath_c);
+        errMsg("Can't read the dir: %s", dirpath_c);
         return 0;
     }
 
@@ -50,12 +50,14 @@ int iterFile(string &dirpath, DirQueue &a_dirqueue) {
                 // TODO: DO SOMETHING
                 // Put it in a queue in order to avoid recurisive
                 a_dirqueue.push(ent_current->d_name);
-                //test:
+                // Test:
             }
             else if(S_ISREG(statbuf.st_mode)) {
                 // TODO: DO SOMTHING
- cout << "\n" << full_file_path << "\n";
-                cout << "It's a regular file" << "\n";
+                PlainText judger;
+                if(judger.isText(full_file_path))
+                    std::cout << "It's a text" << std::endl;
+                // Test:
             }
         }
         
@@ -72,6 +74,8 @@ int iterFile(string &dirpath, DirQueue &a_dirqueue) {
 
 }
 
+
+// I still use recursive to track dirs
 int iterDirs(std::string &parent_path) {
     DirQueue dir_queue;
 

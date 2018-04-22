@@ -27,13 +27,13 @@ int DirQueue::Node::calPriority(char *a_path) {
     if(len <= 0)
         return 0;
     else {
-        sum += a_path[0] * 10000;
+        sum += tolower(a_path[0]) * 10000;
         // At least 1;
         //sum += a_path[0]=='.'?0:a_path[0]*10000;
         if(len >= 2)
-            sum += a_path[1]*100;
+            sum += tolower(a_path[1])*100;
         else 
-            sum += a_path[2];
+            sum += tolower(a_path[2]);
     }
     return sum;
 }

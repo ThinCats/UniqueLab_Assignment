@@ -4,7 +4,7 @@ using std::cout;
 using std::string;
 int main(void) {
 
-    std::string root_path = "/home/brody";
+    std::string root_path = "/";
     iterDirs(root_path);
 /*
     DirQueue dir_queue;
