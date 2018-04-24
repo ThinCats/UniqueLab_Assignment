@@ -50,15 +50,3 @@ void errExit(const char *format, ...) {
     
     exit(EXIT_FAILURE);
 }
-
-bool checkValidWord(char *word) {
-    
-    while(*word != '\0') {
-        // Non Special character
-        if(!(isalnum(*word) || *word=='-' || *word=='_')) {
-            return false;
-        }
-        word++;
-    }
-    return true;
-}

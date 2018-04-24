@@ -11,7 +11,7 @@ void errMsg(const char* format, ...);
 
 void errExit(const char* format, ...);
 
-bool checkValidWord(char *word);
+
 
 
 #endif // ERROR

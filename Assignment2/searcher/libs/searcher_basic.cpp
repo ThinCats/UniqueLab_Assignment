@@ -171,21 +171,19 @@ int singleWordFind(std::string &keyword, std::map <std::string, std::vector<std:
 
        }
        //db_client.sync_co  mmit();
-
 }
-
 // file_keywords is {(keyword, {"1", "2"...})...}
 // To print files as this format:
 // /x/y/z/fileA: KeywordA(4): line 234,347,326,331 KeywordB(2): line 12,1992
 // $pathname: $keyword($times): line ${lines}
 int printLines(std::string &pathname,const std::vector<std::pair<std::string, std::vector<std::string> > >&file_keywords ) {
+    // print path name first
+    cout << pathname << ": ";
     for(auto &keyword_info: file_keywords) {
         const string &keyword_name = std::get<0>(keyword_info);
         const vector<string> &line_list = std::get<1>(keyword_info);
 
         // output
-        cout << pathname << ":";
-        cout << " ";
         cout << keyword_name << "(" << line_list.size() << "):";
         cout << " ";
         cout << "line" << " ";
@@ -201,5 +199,73 @@ int printLines(std::string &pathname,const std::vector<std::pair<std::string, st
     }
     
     // End of one file
-    cout << std::endl;
+    cout << "\n" << std::endl;
+}
+
+int callIndexer(char *pathname) {
+    // connect to redis to check wheher already
+    // exists an index-cache
+    cpp_redis::client check_client;
+    check_client.connect();
+    if(check_client.is_connected() == false) {
+        errExit("Redis connect failed\n");
+    }
+
+
+    bool will_build_index;
+    string old_pathname = pathname;
+
+    // Get the path record from database
+    // compare the old pathname
+    // Select database 3 to get the path info
+    check_client.select(3);
+    
+    check_client.get("index_db_path", [&old_pathname, &will_build_index](cpp_redis::reply& reply){
+        if(reply.is_string()) {
+            will_build_index = !(old_pathname == reply.as_string());
+            cout << reply.as_string();
+        } else {
+            // means NIL
+            will_build_index = true;
+        }
+   });
+   check_client.sync_commit();
+   // Close database
+   check_client.disconnect();
+
+   if(will_build_index == false) {
+       cout << "\n" <<  "Database can be reused" << "\n";
+       cout << "No needs to rebuild" << std::endl;
+       return 1;
+   } else {
+       // call the indexer from external
+       char cmd[1024];
+       sprintf(cmd, "./indexer %s", pathname);
+       if(executeSh(cmd) == -1) {
+           errMsg("Please check whether the indexer is in this dir\n");
+           return -1;
+       }
+
+       cout << "Indexer exited..." << endl;
+       return 1;
+    
+   }
+
+}
+
+int executeSh(const char* command) {
+    FILE *fp;
+
+    // buf space to save output
+    char buf[1024];
+    if((fp=popen(command, "r"))!=nullptr) {
+        while(fgets(buf, 1024, fp)!=nullptr) {
+            puts(buf);
+        }
+        pclose(fp);
+    } else {
+        errMsg("Popen Error");
+        return -1;
+    }
+    return 1;
 }
