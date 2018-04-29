@@ -27,6 +27,7 @@ int main(int argc, char *argv[]) {
             std::vector<std::string> keyword_list;
             closedir(tmp_dir);
             for(int i=2; i < argc;i++) {
+                // Word is too long
                 if(strlen(*(argv+i)) > 1000) {
                     errExit("We are sorry, Maybe there are no words more than 1000 length\n");
                 }
@@ -38,6 +39,8 @@ int main(int argc, char *argv[]) {
                 }
             }
             
+            // Format the pathname
+            format(pathname);
             // call the index program to build index
             callIndexer(pathname);
 

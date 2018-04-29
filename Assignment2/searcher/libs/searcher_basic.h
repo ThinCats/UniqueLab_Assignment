@@ -15,4 +15,6 @@ int singleWordFind(std::string &keyword, std::map <std::string, std::vector<std:
 int callIndexer(char *pathname);
 
 int executeSh(const char* command);
+
+int format(char *pathname);
 #endif // !1SEARCHER_H
