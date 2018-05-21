@@ -16,6 +16,7 @@ class Question(object):
     
     def __init__(self, a_name, a_type, a_class=codes.CLASS["IN"]):
         self._name = dnsname.DNSName.encode(a_name)
+        self._name_val = a_name
         self._type = a_type
         self._data = None
         self._class = a_class
@@ -24,8 +25,19 @@ class Question(object):
         else:
             self._length = 0
 
-    def get_name(self):
-        return self._name
+    @property
+    def unpacked_data(self):
+        """
+        data unpacked
+        return tuple(name, type, class)
+        """
+        return (self._name_val, self._type, self._class)
+    @property
+    def name(self):
+        return self._name_val
+    @property
+    def qtype(self):
+        return self._type
     def pack(self):
         self._data = struct.pack("!"+str(len(self._name))+"s"+"HH", self._name, self._type, self._class)
     
@@ -36,9 +48,13 @@ class Question(object):
     def __len__(self):
         return self._length
 
+    def __str__(self):
+        return (str(self._name_val) + ' ' + codes.TYPE_val[self._type] + ' ' +  codes.CLASS_val[self._class])
+
 class RR(object):
     def __init__(self, a_name, a_type, a_ttl, a_class=codes.CLASS["IN"], a_rdata=None):
         self._name = dnsname.DNSName.encode(a_name)
+        self._name_val = a_name
         self._class = a_class
 
         self._type = a_type
@@ -55,26 +71,26 @@ class RR(object):
             self._rdlength = None
         self._data = None
 
-    def add_rdata_raw(self, a_data):
-        if not isinstance(a_data, rdata.RDATA):
-            raise TypeError("[Err]a_data is not RDATA")
+    def _add_rdata_raw_bytes(self, a_data):
+        
         # TODO: Fullfill this
         self._rdata = a_data
         self._rdlength = len(a_data)
     
     def add_rdata(self, val):
-        if self._type == codes.TYPE["A"]:
-            self._rdata = rdata.A(val)
-        if self._type == codes.TYPE["CNAME"]:
-            self._rdata = rdata.CNAME(val)
-        if self._type == codes.TYPE["NS"]:
-            self._rdata = rdata.NS(val)
+        if type(val) == bytes:
+            self._add_rdata_raw_bytes(val)
+            return
+
+        try:
+            self._rdata = rdata.rdataClassList[codes.TYPE_val[self._type]](val)
+        except KeyError:
+            raise KeyError("add rdata wrong type")
         
-        self._rdlength = len(self._rdata)
+        self._rdlength = len(self._rdata.data)
 
 
-    def pack(se
-lf):
+    def pack(self):
         if self._rdata == None:
             raise ValueError("[Err] rdata is empty")
         
@@ -82,17 +98,39 @@ lf):
         self._data = self._name
         self._data += struct.pack("!HHIH", self._type, self._class, self._ttl, self._rdlength)
         # pack rdata
+        if not self._rdata.data:
+            self._rdata.pack()
         self._data += self._rdata.data
     
     @property
     def data(self):
         return self._data
+    @property
+    def name(self):
+        return self._name_val
+    @property
+    def qtype(self):
+        return self._type
+    @property
+    def ttl(self):
+        return self._ttl
     
+    @property
+    def unpacked_data(self):
+        """
+        Return tuple(name, type, class, ttl, rdlength, rdata)
+        Rdata is name or ip with string
+        """
+        return (self._name_val, self._type, self._class, self._ttl, self._rdlength, self._rdata.val)
     def __str__(self):
-        return str(self._data)
+        return (str(self._name_val) + ' ' + str(codes.TYPE_val[self._type]) + ' ' + codes.CLASS_val[self._class] + ' ' + str(self._ttl) + ' ' + str(self._rdlength) + ' ' + str(self._rdata)) 
+
 
 class DNSSection(object):
-    
+    """
+    For both RR object and question
+    A wrapper list
+    """
     def __init__(self):
         self._RRlist = []
         self._data = b""
@@ -100,6 +138,9 @@ class DNSSection(object):
 
     
     def add_RR(self, a_RR):
+        """
+        RR can also judge as question
+        """
         self._RRlist.append(a_RR)
         self._rr_lens += 1
 
@@ -107,21 +148,31 @@ class DNSSection(object):
         for a_RR in self._RRlist:
             a_RR.pack()
             self._data += a_RR.data
+        return self._data
 
     @property
     def data(self):
         return self._data
-
+    @property
+    def rrlist(self):
+        return self._RRlist
+    
+    def is_empty(self):
+        """
+        Judge whether contains elements
+        """
+        return self._rr_lens == 0
+    
     def __len__(self):
         return self._rr_lens
     def __str__(self):
-        return str(self._data)
+        return str([str(x) for x in self._RRlist])
 
 
 if __name__ == "__main__":
     # Question:
     que_res = Question(b"www.baidu.com", codes.TYPE["CNAME"])
-    name = que_res.get_name()
+    name = que_res.name
     que_res.pack()
     print(que_res.data)
     # RR

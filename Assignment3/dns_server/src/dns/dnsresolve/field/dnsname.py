@@ -22,46 +22,37 @@ class DNSName(object):
     # No compressed
     @classmethod
     def encode(cls, a_name):
-        if type(a_name) == str:
-            a_name = bytes(a_name, "ascii")
+        if a_name == None:
+            return b""
+        
+        if not type(a_name) == list:
+            if type(a_name) == str:
+                a_name = bytes(a_name, "ascii")
 
-        if(len(a_name) > 253):
-            raise ValueError("Name is more than 253 characters")
-        # a.com -> ("a", "com")
-        lables = a_name.split(b".")
+            if(len(a_name) > 253):
+                raise ValueError("Name is more than 253 characters")
+            # a.com -> ("a", "com")
+            lables = a_name.split(b".")
+        else:
+            lables = a_name
+        # ROOT server
         out = []
         for a_lable in lables:
+            if a_lable == b"":
+                continue
             if(len(a_lable) > 63):
                 raise ValueError("Lable %s is more than 63 characters" %(a_lable))
             out.append(struct.pack("!B", len(a_lable)))
             out.append(a_lable)
         out.append(b"\0")
+        
         return b"".join(out)
 
     # For decode lables that is compressed
     # But temporaily unsuppor for widecard
     @classmethod
     def decode(cls, a_lables, all_data):
-        index = 0
-        lable = []
-        max_len = len(a_lables)
-        while index < max_len:
-            length = a_lables[index]
-            # print_bits(length)
-            if length == 0:
-                break
-            # if pointer:
-            elif get_bits(length, 6, 7) == 3:
-                # Find length
-                pointer = get_bits(struct.unpack("!H", a_lables[index:index+2])[0], 0, 13)
-                pointed_length = all_data[pointer]
-                lable.append((all_data[pointer+1:pointer+1+pointed_length]))
-                index += (pointed_length + 1)
-            else:
-                index += 1
-                lable.append((a_lables[index:index+length]))
-                index += length
-            print(lable)
+        pass
 
    # def get_name(self):
    #     return self.encoded_name
@@ -71,9 +62,6 @@ class DNSName(object):
         pass
 
 if __name__ == "__main__":
-    print(DNSName.encode(b"www.baidu.com"))
-    data = b"\xc0\x3a"
-
     
     raw_data =  b"\xac\x78\x81\x80\x00\x01\x00\x03\x00\x01\x00\x00\x02\x64\x63\x08" \
 b"\x73\x65\x72\x76\x69\x63\x65\x73\x0c\x76\x69\x73\x75\x61\x6c\x73" \
@@ -92,6 +80,7 @@ b"\x74\x09\x6d\x69\x63\x72\x6f\x73\x6f\x66\x74\x03\x63\x6f\x6d\xc0" \
 b"\x9d\x7d\xb0\x66\x74\x00\x00\x03\x84\x00\x00\x01\x2c\x00\x09\x3a" \
 b"\x80\x00\x00\x00\x3c"
 
-
-    # print(out)
-    print(DNSName.decode(data, raw_data))
+    res = DNSName()
+    print(res.encode("www.baidu.com."))
+    print(res.encode(""))
+    print(res.encode("."))

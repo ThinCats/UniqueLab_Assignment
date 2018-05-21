@@ -15,14 +15,25 @@ This is for setting up the header
 
 class DNSHeader(object):
 
-    def __init__(self, id=None, flag=0, data=None):
-        self._id = id
-        self._flag = flag
-        self._qdcount = 0
-        self._ancount = 0
-        self._nscount = 0
-        self._arcount = 0
-        self._data = data
+    def __init__(self, id=None, flag=0, qd=0, an=0, ns=0, ar=0, header_raw_data=None):
+        if header_raw_data == None:
+            self._id = id
+            self._flag = flag
+            self._qdcount = qd
+            self._ancount = an
+            self._nscount = ns
+            self._arcount = ar
+        else:
+            out = struct.unpack("!HHHHHH", header_raw_data)
+            self._id = out[0]
+            self._flag = out[1]
+            self._qdcount = out[2]
+            self._ancount = out[3]
+            self._nscount = out[4]
+            self._arcount = out[5]
+
+        self._data = header_raw_data
+
 
     def add_id(self, id=None):
         if id == None:
@@ -39,6 +50,8 @@ class DNSHeader(object):
     
     def modify_flag(self, **kw):
         for key, val in kw.items():
+            if key == "id":
+                continue
             self._flag = dnsflag.setFunctions[key.lower()](self._flag, val)
 
     # Read flag mapping item
@@ -76,14 +89,14 @@ class DNSHeader(object):
         return (self._qdcount, self._ancount, self._nscount, self._arcount)
 
     @classmethod
-    def unpack(cls, a_data):
+    def unpack_class(cls, a_data):
         #return struct.unpack
         # return struct.unpack("!HHHHHH", a_data)
         out = struct.unpack("!HHHHHH", a_data)
-        return cls(out[0], out[1])
-
+        return cls(out[0], out[1], out[2], out[3], out[4], out[5])
+    
     def __str__(self):
-        return str(self._data)
+        return "The header is:" + str(self._data)
 
 
 
@@ -99,7 +112,7 @@ if __name__ == "__main__":
     
     print(a_header.data)
 
-    print(a_header.unpack(a_header.data).flag)
+    print(a_header.unpack_class(a_header.data).flag)
 
     a_header.modify_flag(aa = 1, tc = 0, qr = 1)
     a_header.pack()
