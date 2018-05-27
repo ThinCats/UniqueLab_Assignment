@@ -4,6 +4,9 @@ import logging
 import threading
 import struct
 
+import multiprocessing
+import os
+
 logger = logging
 
 if __package__:
@@ -75,7 +78,8 @@ class myDNSHandler(object):
 
 class myServer(object):
 
-    def __init__(self, addr_family):
+    def __init__(self, addr_family, is_tcp=False):
+        self._isTcp = is_tcp
         self._addr_family = addr_family
 
 
@@ -110,12 +114,17 @@ class myServer(object):
     def _udp_server(self):
         a_socket = socket.socket(self._addr_family, socket.SOCK_DGRAM)
         a_socket.bind((self._ip, self._port))
+        a_socket.setblocking(False)
         while True:
             a_socket.settimeout(20)
             try:
                 data, addr = a_socket.recvfrom(1024)
             except socket.timeout:
-                data, addr = a_socket.recvfrom(1024)
+                try:
+                    data, addr = a_socket.recvfrom(1024)
+                except socket.timeout as e:
+                    print(e)
+                    continue
             
             thread_udp = threading.Thread(target=self._handle_udp, args=(a_socket, addr, data))
             logger.debug("Thread starts {}".format(thread_udp.name))
@@ -123,18 +132,61 @@ class myServer(object):
             thread_udp.start()
 
 
-    def start_server(self, isTcp=False, ip="localhost", port=53):
+    def start_server(self, ip="localhost", port=53):
         self._ip = ip
         self._port = port
-        self._isTcp = isTcp
 
-        if isTcp:
+        if self._isTcp:
             self._tcp_server()
         else:
             self._udp_server()
 
+def start_server(is_ipv6, is_tcp, ip="localhost", port=53):
+    
+    if is_ipv6:
+        server = myServer(socket.AF_INET6, is_tcp)  
+    else:
+        server = myServer(socket.AF_INET, is_tcp)
+
+    server.start_server()
+
+def start_server_multi():
+    server_list = []
+    # ipv4, udp
+    server_list.append(myServer(socket.AF_INET, False))
+    # ipv4, tcserver_list[i].start_server()p
+    server_list.append(myServer(socket.AF_INET, True))
+    # ipv6, tcp
+    server_list.append(myServer(socket.AF_INET6, True))
+    # ipv6, udp
+    server_list.append(myServer(socket.AF_INET6, False))
+
+    print("Start all server from parent process {}".format(os.getpid()))
+    # server_pool = multiprocessing.Pool(4)
+    process_list = []
+    for i in range(4):
+        # start server in pool
+        print("server starts")
+        # server_pool.apply_async(server_list[i].start_server())
+        p = multiprocessing.Process(target=test_)
+        p.start()
+        process_list.append(0)
+    # process_list[0].join()
+    print("Server end")
+    # server_pool.close()
+    # Wait for all server shutdown
+    # server_pool.join()
+
+    print("Server all close")
+
+
+def test_():
+    print("Test {}".format(os.getpid()))
+    while True:
+        pass
+
+    
 
 if __name__ == "__main__":
 
-    server = myServer(socket.AF_INET)
-    server.start_server(False)
+    start_server_multi()

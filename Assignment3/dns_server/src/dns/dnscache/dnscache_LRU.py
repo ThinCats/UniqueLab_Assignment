@@ -115,7 +115,6 @@ class LRUCache(object):
         
         a_key = (qname, type_id, class_id)
 
-        print(self._head)
         try:
             self._lock.acquire()
             # No head:

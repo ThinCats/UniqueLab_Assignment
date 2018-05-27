@@ -77,6 +77,8 @@ class myDNSHandler(socketserver.BaseRequestHandler):
 
         # Close socketf
         # self._cli_sock.close()
+        logger.debug("Thread ending {}".format(threading.current_thread().name))
+
 
 
 

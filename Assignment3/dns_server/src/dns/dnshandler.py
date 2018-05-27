@@ -242,7 +242,7 @@ class DNSHandler(object):
 
     def cache_handle(self):
 
-        logger.debug("Reading from cache")
+        logger.info("Reading from cache\n")
         header = self._resolver.unpack_header_raw()
         question = self._resolver.unpack_question_raw()
 
@@ -257,7 +257,7 @@ class DNSHandler(object):
                 logger.debug("No cache found")
                 return False
             else:
-                logger.debug("Find cache")
+                logger.info("Find cache\n")
                 logger.info("Resolving from cache {}".format(ques.name))
                 a_resolver = dnsresolver.DNSResolver(ans)
                 a_resolver.unpack_all()
