@@ -14,15 +14,20 @@ if __name__ == "__main__":
     # ipv6, udp
     server_args.append((True, False))
     # ipv6, tcp
-    server_args.append((True, False))
+    server_args.append((True, True))
 
     server_pool = multiprocessing.Pool(4)
 
-    for i in range(4):
-        server_pool.apply_async(server_ipv6.start_server, args=server_args[i])
+    for arg in server_args:
+        server_pool.apply_async(server_ipv6.start_server, args=arg)
     
     print("Start all server from parent {}".format(os.getpid()))
     server_pool.close()
-    server_pool.join()
+    try:
+        server_pool.join()
+    except KeyboardInterrupt as e:
+        print(e)
+        server_pool.terminate()
+    
     print("Server all ends")
     

@@ -7,13 +7,13 @@ import time
 # logging config
 logging.basicConfig(level=logging.DEBUG, format="-%(levelname)s %(message)s")
 logger = logging.getLogger(__name__)
-socket.setdefaulttimeout(2)
 if not __package__:
     from dnsresolve import dnsrecord
     from dnsresolve import dnsresolver
     from dnsresolve.field import codes
     from dnscache import dnscache
     from dnscache import dnscache_LRU
+    from dnsauth import dnsauth
     
 else:
     from .dnsresolve import dnsrecord
@@ -21,6 +21,7 @@ else:
     from .dnsresolve import dnsresolver
     from .dnscache import dnscache
     from .dnscache import dnscache_LRU
+    from .dnsauth import dnsauth
 
 class DNSHandler(object):
 
@@ -34,9 +35,15 @@ class DNSHandler(object):
         self._isTcp = istcp
         self._resolver = resolver
         self._cli_socket = cli_socket
+        # For socket timeout
+        self._cli_socket.settimeout(2)
+
         self._client_address = client_address
         self._addr_family = addr_family
-    
+
+        # Cache
+        self._cache = dnscache_LRU.cache_ipv4 if(addr_family is socket.AF_INET) else dnscache_LRU.cache_ipv6
+
     def recursive_query(self):
         """
         Just change the header that received from and then send back
@@ -62,45 +69,69 @@ class DNSHandler(object):
 
         # Connect to parent DNS to get response
         dns_sock = None
+        is_timeout = False
+        is_failed = False
         # if TCP:
         if self._isTcp:
             dns_sock = socket.socket(self._addr_family, socket.SOCK_STREAM)
-            dns_sock.connect(dns_server)
-            query_data = struct.pack("!H", len(query_data)) + query_data
-            dns_sock.sendall(query_data)
+            try:
+                dns_sock.connect(dns_server)
+                query_data = struct.pack("!H", len(query_data)) + query_data
+                dns_sock.sendall(query_data)
+            except OSError as e:
+                print(e)
+                is_failed = True
         else:
             dns_sock = socket.socket(self._addr_family, socket.SOCK_DGRAM)
             dns_sock.sendto(query_data, dns_server)
-
+        # Set default timeout
+        dns_sock.settimeout(2)
         try: 
-            receive_data = dns_sock.recv(8192)
+            if not is_failed: # Connection not failed
+                receive_data = dns_sock.recv(8192)
+            else:
+                receive_data = None
+                is_timeout = True
+
         except socket.timeout as e:
-            receive_data = dns_sock.recv(8192)
-
-        # TCP
-        if self._isTcp:
-            length = struct.unpack("!H", receive_data[:2])[0]
-            # Sending not finished
-            if len(receive_data) < length + 2:
-                receive_data += dns_sock.recv(8192)
+            try:
+                receive_data = dns_sock.recv(8192)
+            except socket.timeout:
+                logger.error("Parent Dns Server query failed")
+                is_timeout = True
+        
+        if not is_timeout:
+        # adding timeout handling
+            # TCP
+            if self._isTcp:
+                length = struct.unpack("!H", receive_data[:2])[0]
+             # Sending not finished
+                if len(receive_data) < length + 2:
+                    receive_data += dns_sock.recv(8192)
             
-            receive_data = receive_data[2:]
-        # UDP
-        else:
-            pass
-        # Server_dns socket close
-        dns_sock.close
+                receive_data = receive_data[2:]
+            # UDP
+            else:
+                pass
+            # Server_dns socket close
+            dns_sock.close
 
-        res = dnsresolver.DNSResolver(receive_data)
-        logger.debug(receive_data)
-        # Put into cache
-        question = res.unpack_question_raw()
-        answer = res.unpack_answers_raw()
-        if not answer.is_empty():
-            for ques in question.rrlist:
-                print("save in cache")
-                logger.info("Resolving {}".format(ques.name))
-                self.save_in_cache(ques.name, codes.TYPE_val[ques.qtype], receive_data, answer.rrlist[0].ttl)
+            res = dnsresolver.DNSResolver(receive_data)
+            logger.debug(receive_data)
+            # Put into cache
+            question = res.unpack_question_raw()
+            answer = res.unpack_answers_raw()
+            if not answer.is_empty():
+                for ques in question.rrlist:
+                    print("save in cache")
+                    logger.info("Resolving {}".format(ques.name))
+                    self.save_in_cache(ques.name, codes.TYPE_val[ques.qtype], receive_data, answer.rrlist[0].ttl)
+        
+        else:
+            # TIMEOUT
+            self._resolver.record.modify_header(rcode=codes.RCODE["ServFail"], qr=1)
+            receive_data = self._resolver.pack_just_header()
+            
         # UDP
         if not self._isTcp:
             self._cli_socket.sendto(receive_data, self._client_address)
@@ -238,7 +269,7 @@ class DNSHandler(object):
 
     def save_in_cache(self, name, a_type, a_data, a_ttl):
         # return dnscache.cache.set_cache(name, a_type, a_data, a_ttl)
-        return dnscache_LRU.cache.set(name, codes.TYPE[a_type], codes.CLASS["IN"], a_data, a_ttl)
+        return self._cache.set(name, codes.TYPE[a_type], codes.CLASS["IN"], a_data, a_ttl)
 
     def cache_handle(self):
 
@@ -250,7 +281,7 @@ class DNSHandler(object):
         for ques in question.rrlist:
             # Get cache
             # ans = dnscache.cache.get_cache(ques.name, codes.TYPE_val[ques.qtype])
-            ans = dnscache_LRU.cache.get(ques.name, ques.qtype, codes.CLASS["IN"])
+            ans = self._cache.get(ques.name, ques.qtype, codes.CLASS["IN"])
             # logger.debug(ans) 
             # No cache
             if not ans:
@@ -273,3 +304,45 @@ class DNSHandler(object):
                     self._cli_socket.sendall(data)
                 
                 return True
+
+
+    # For authoritive Record
+    def auth_handle(self):
+
+        logger.info("Try to resolving from Zone file")
+        logger.info("Reading from cache\n")
+
+        header = self._resolver.unpack_header_raw()
+        question = self._resolver.unpack_question_raw()
+
+        # Judge whether it's in Zone
+
+        # TODO: MANY question condition
+        for ques in question.rrlist:
+            if not dnsauth.author.is_inZone(ques.name):
+                return False
+            ans = dnsauth.author.getRecord(ques.name, ques.type_str)
+            if not ans:
+                logger.debug("No Record found")
+                return True
+            else:
+                logger.info("Find Record\n")
+                logger.info("Resolving from Zone File {}".format(ques.name))
+                (a_name, a_type_str, a_val) = ans
+
+                reply = dnsrecord.DNSRecord()
+                reply.add_header_class(header)
+                reply.add_question_class(ques)
+                reply.modify_header(id=header.id, qr=1, aa=0, ad=0)
+                reply.add_answer(a_name, codes.TYPE[a_type_str], 200, a_val)
+                data = reply.pack()
+                # Sent to client
+                # UDP
+                if not self._isTcp:
+                    self._cli_socket.sendto(data, self._client_address)
+
+                else:
+                    data = struct.pack("!H", len(data)) + data
+                    self._cli_socket.sendall(data)
+                
+                return True        

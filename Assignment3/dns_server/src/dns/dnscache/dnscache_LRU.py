@@ -4,7 +4,7 @@ import struct
 import logging
 import time
 
-
+# For ip_type selection
 
 class LRUCache(object):
 
@@ -75,10 +75,11 @@ class LRUCache(object):
             self._tail = a_node
 
     def get(self, qname, type_int, class_int):
-
+        print(qname)
         if not type(qname) == str:
             qname = str(qname, "ascii")
-        if not qname[-1] == ".":
+        print(qname)
+        if len(qname) == 0 or not qname[-1] == ".":
             qname += "."
         # key: tuple(string, int, int)
         a_key = (qname, type_int, class_int)
@@ -110,7 +111,7 @@ class LRUCache(object):
     def set(self, qname, type_id, class_id, val, ttl):
         if not type(qname) == str:
             qname = str(qname, "ascii")
-        if not qname[-1] == ".":
+        if qname is None or not qname[-1] == ".":
             qname += "."
         
         a_key = (qname, type_id, class_id)
@@ -141,8 +142,8 @@ class LRUCache(object):
             self._lock.release()    
 
 
-cache = LRUCache()       
-
+cache_ipv4 = LRUCache()       
+cache_ipv6 = LRUCache()
 
 if __name__ == "__main__":
 

@@ -35,6 +35,10 @@ class Question(object):
     @property
     def name(self):
         return self._name_val
+    
+    @property
+    def type_str(self):
+        return codes.TYPE_val[self._type]
     @property
     def qtype(self):
         return self._type
@@ -143,7 +147,9 @@ class DNSSection(object):
         """
         self._RRlist.append(a_RR)
         self._rr_lens += 1
-
+    def append(self, a_RR):
+        self.add_RR(a_RR)
+    
     def pack(self):
         for a_RR in self._RRlist:
             a_RR.pack()

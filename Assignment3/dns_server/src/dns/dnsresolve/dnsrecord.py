@@ -100,7 +100,7 @@ class DNSRecord(object):
     # _class means it's the format of Questions
     # Questions{}
     def add_question_class(self, ques):
-        if not isinstance(ques, dnssec.Questions):
+        if not isinstance(ques, dnssec.Question):
             raise TypeError("[Err] ques is not Question")
         self._ques.append(ques)
     

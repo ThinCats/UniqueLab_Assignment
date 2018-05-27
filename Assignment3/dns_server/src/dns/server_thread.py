@@ -12,6 +12,7 @@ if __package__ == None:
     from dnsresolve import dnsresolver
     import dnshandler
     from dnscache import dnscache
+    from dnsauth import dnsauth
 
 else:
     from .dnsresolve import dnsrecord
@@ -19,6 +20,7 @@ else:
     from .dnsresolve import dnsresolver
     from . import dnshandler
     from .dnscache import dnscache
+    from .dnsauth import dnsauth
 
 # logging config
 logging.basicConfig(level=logging.DEBUG, format="%(levelname)s- %(message)s")
@@ -59,6 +61,10 @@ class myDNSHandler(socketserver.BaseRequestHandler):
         # Call different functions
         # New the handler functions
         self._handler = dnshandler.DNSHandler(self._isTcp, self._resolver, self._cli_sock, self.client_address, socket.AF_INET)
+        
+        # Zone handle
+        if self._handler.auth_handle():
+            return 
         
         # cache handle
         if self._handler.cache_handle():

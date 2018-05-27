@@ -57,7 +57,12 @@ class myDNSHandler(object):
         # Call different functions
         # New the handler functions
         self._handler = dnshandler.DNSHandler(self._isTcp, self._resolver, self._cli_sock, self.client_address, self._addr_family)
-        
+
+        # Zone handle
+        if self._handler.auth_handle():
+            # Successful
+            return
+
         # cache handle
         if self._handler.cache_handle():
             # Successful
@@ -78,7 +83,9 @@ class myDNSHandler(object):
 
 class myServer(object):
 
-    def __init__(self, addr_family, is_tcp=False):
+    def __init__(self, addr_family, is_tcp=False, ip="localhost", port=53):
+        self._ip = ip
+        self._port = port
         self._isTcp = is_tcp
         self._addr_family = addr_family
 
@@ -104,6 +111,8 @@ class myServer(object):
             logger.debug("Thread starts {}".format(thread_tcp.name))
             thread_tcp.start()
 
+        a_socket.close()
+    
     def _handle_udp(self, sock, addr, data):
         request = (data, sock)
         client_addr = addr
@@ -116,37 +125,33 @@ class myServer(object):
         a_socket.bind((self._ip, self._port))
         a_socket.setblocking(False)
         while True:
-            a_socket.settimeout(20)
-            try:
-                data, addr = a_socket.recvfrom(1024)
-            except socket.timeout:
-                try:
-                    data, addr = a_socket.recvfrom(1024)
-                except socket.timeout as e:
-                    print(e)
-                    continue
+            a_socket.settimeout(200000)
+            data, addr = a_socket.recvfrom(1024)
             
             thread_udp = threading.Thread(target=self._handle_udp, args=(a_socket, addr, data))
             logger.debug("Thread starts {}".format(thread_udp.name))
             
             thread_udp.start()
 
+        a_socket.close()
 
-    def start_server(self, ip="localhost", port=53):
-        self._ip = ip
-        self._port = port
 
+    def start_server(self):
         if self._isTcp:
             self._tcp_server()
         else:
             self._udp_server()
 
 def start_server(is_ipv6, is_tcp, ip="localhost", port=53):
-    
+
+    ipv6_str_dic = {"True":"IPV6", "False":"IPV4"}
+    tcp_str_dic = {"True":"TCP", "False":"UDP"}
+    # Indicate message (server type info)
+    print("{} with {} Server is starting".format(ipv6_str_dic[str(is_ipv6)], tcp_str_dic[str(is_tcp)]))
     if is_ipv6:
-        server = myServer(socket.AF_INET6, is_tcp)  
+        server = myServer(socket.AF_INET6, is_tcp, ip, port)  
     else:
-        server = myServer(socket.AF_INET, is_tcp)
+        server = myServer(socket.AF_INET, is_tcp, ip, port)
 
     server.start_server()
 
