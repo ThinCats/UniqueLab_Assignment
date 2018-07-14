@@ -5,7 +5,6 @@ import socket
 import select
 import errno
 
-logging.basicConfig(format='%(asctime)s %(levelname)-8s: %(message)s')
 if __package__:
     from .resolver import codes, connect, nego, udp, support
     from . import handler
@@ -15,7 +14,6 @@ else:
 
 logging.basicConfig(level=logging.DEBUG, format="%(levelname)s- %(message)s")
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
 class myHandler(socketserver.BaseRequestHandler):
     
     # This is for forwarding packet
