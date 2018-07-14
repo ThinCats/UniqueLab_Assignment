@@ -3,6 +3,7 @@ import threading
 import logging
 import socket
 import select
+import errno
 
 logging.basicConfig(format='%(asctime)s %(levelname)-8s: %(message)s')
 if __package__:
@@ -35,6 +36,11 @@ class myHandler(socketserver.BaseRequestHandler):
                     elif fileno == self.request.fileno():
                         if self._remote_soc.send(self.request.recv(4096)) <=0:
                             break
+        except socket.error as err:
+            if err.errno == errno.ECONNRESET:
+                logger.debug("Connection Reset:\n{}, {}".format(self.request, self._remote_soc))
+            else:
+                raise
         finally:
             epoll.unregister(self.request.fileno())
             epoll.unregister(self._remote_soc.fileno())
