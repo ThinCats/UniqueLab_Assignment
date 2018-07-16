@@ -20,6 +20,8 @@ class myHandler(socketserver.BaseRequestHandler):
     def _forward_tcp(self):
         logger.info("Start forwarding from {}:{} to {}:{}".format(*self.request.getpeername(), *self._remote_soc.getpeername()))
         # Use epoll to fowarding packet
+
+        # 
         epoll = select.epoll()
         epoll.register(self.request.fileno(), select.EPOLLIN)
         epoll.register(self._remote_soc.fileno(), select.EPOLLIN)
