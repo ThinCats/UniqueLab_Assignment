@@ -17,8 +17,15 @@ if __package__:
 else:
     from resolver import nego, connect, support, codes, udp, userpass
 
-def negotiation_srv(nego_recv_raw, srv_soc):
+def negotiation_srv(nego_recv_raw, srv_soc, user_method=None):
 
+    # NEW ADDED
+    # USER-SET
+    if not user_method:
+        srv_soc.sendall(nego.srv_encode(user_method))
+        return not user_method == codes.METHOD["REFUSE"]
+    ## END
+    
     nego_recv = nego.srv_decode(nego_recv_raw)
     # print("Nego recv data: {}".format(nego_recv))
 
@@ -74,6 +81,7 @@ def connection_srv(connect_recv_raw):
     connect_rep_raw = connect.srv_encode(srv_status, connect_recv[2], *connect_recv[3])
     # print("Connect reply raw data: {}".format(connect_rep_raw))
     return (remote_soc, connect_rep_raw)
+
 
 def userpass_srv(srv_soc):
     # TODO: Password list!!!
@@ -226,6 +234,9 @@ def _remote_connect(addr_type, addr, port, sock_type=socket.SOCK_STREAM, domain_
     """
     # Successful
     return (codes.STATUS["SUCCEED"], remote_soc)
+
+
+
 if __name__ == "__main__":
     # _remote_connect(codes.ADDRESS["IPV4"], "118.184.184.70", 80)
     raw = connect.cli_encode(codes.REQUEST["CONNECT"], codes.ADDRESS["IPV4"], "118.184.184.70", 80)

@@ -56,10 +56,12 @@ class RC4(object):
         return key_stream
 
     def _data_xor_key(self, data_in):
+        if len(data_in) == 0:
+            return data_in
+        
         data_out_lst = []
         # Try to get keystream from cache
         key = self._cache.get(len(data_in), None)
-        print(key)
         if not key:
             # Cache not exist:
             key = self._gen_keystream(len(data_in))
@@ -81,8 +83,10 @@ class RC4(object):
     def encrypt(self, data_in):
         return self._data_xor_key(data_in)
 
+
 if __name__ == "__main__":
-    test = RC4("hello_kitty")
+    test = RC4()
+    test.init("1314")
     encr = test.encrypt(b"xxx")
     print(encr)
     print(test.decrypt(encr))
