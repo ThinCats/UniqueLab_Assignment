@@ -5,15 +5,17 @@ import socket
 import select
 import errno
 
+# socket.setdefaulttimeout(5)
 if __package__:
     from . import handler
+    from . import Server
     from .cryptor import cipher
 
 else:
     import handler
+    import Server
     from cryptor import cipher
 
-logging.basicConfig(level=logging.DEBUG, format="%(levelname)s- %(message)s")
 logger = logging.getLogger(__name__)
 
 # For handshake
@@ -61,21 +63,27 @@ class myHandler(socketserver.BaseRequestHandler):
         is_verified_ok = True
         hello_recv_raw = self.request.recv(4096)
             # Verify packet
-        if cipher.cryptor.decrypt(hello_recv_raw) == magic_byts:
+        if self.server.cryptor.decrypt(hello_recv_raw) == magic_byts:
             hello_send_raw = b"\x00"
         else:
             hello_send_raw = b"\x01"
             is_verified_ok = False
+            logger.warn("Handshake Verify failed")
 
-        self.request(hello_send_raw + hello_recv_raw)
+        self.request.send(hello_send_raw + hello_recv_raw)
         # End connection
         if not is_verified_ok:
             return
         
         # Recv connection 
-        connect_loc_recv_raw = self.request.recv(8192)
+        connect_loc_recv_raw = self.server.cryptor.decrypt(self.request.recv(8192))
+        if not connect_loc_recv_raw:
+            # Connection end
+            logger.warn("Connection Reset by peers at connection progress")
+            return
+        
         self._to_remote_soc, connect_loc_send_raw = handler.connection_srv(connect_loc_recv_raw)
-        self.request.sendall(connect_loc_send_raw)
+        self.request.sendall(self.server.cryptor.encrypt(connect_loc_send_raw))
         
             # check status
         if self._to_remote_soc is None:
@@ -125,7 +133,7 @@ class SocksServer(object):
         self._server.shutdown()
 
 if __name__ == "__main__":
-    server = SocksServer("127.0.0.1", 6233, myHandler, "2333")
+    server = SocksServer("127.0.0.1", 9899, myHandler, "2333")
     server.start()
 
 

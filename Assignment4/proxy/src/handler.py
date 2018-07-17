@@ -8,10 +8,10 @@ Clients sending packet function will not be included here
 import socket
 import logging
 import errno
+import struct
 
-
-logging.basicConfig(format='%(asctime)s %(levelname)-8s: %(message)s')
-logger = logging.getLogger()
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(filename)s %(lineno)d %(threadName)s %(levelname)-8s: %(message)s')
+logger = logging
 if __package__:
     from .resolver import nego, connect, support, codes, udp, userpass
 else:
@@ -21,10 +21,11 @@ def negotiation_srv(nego_recv_raw, srv_soc, user_method=None):
 
     # NEW ADDED
     # USER-SET
-    if not user_method:
+    if user_method:
         srv_soc.sendall(nego.srv_encode(user_method))
         return not user_method == codes.METHOD["REFUSE"]
     ## END
+
     
     nego_recv = nego.srv_decode(nego_recv_raw)
     # print("Nego recv data: {}".format(nego_recv))
@@ -97,7 +98,7 @@ def userpass_srv(srv_soc):
     elif username == "brody" and password == "123":
         status = 0
     else:
-        logger.error("Client USERPASS: user or password invalid")
+        logger.warn("USERPASS FAILED: User or password invalid")
         status = 1
     srv_soc.sendall(userpass.srv_encode(status))
     return status == 0
@@ -198,10 +199,10 @@ def _remote_connect(addr_type, addr, port, sock_type=socket.SOCK_STREAM, domain_
             remote_soc.connect((addr, port))
 
         except socket.timeout as err:
-            logger.error("Connect Timeout: {}".format(err))
+            logger.error("Connect Timeout: [{}:{}]".format(addr, port))
             remote_soc.close()
-
             return (codes.STATUS["HOST"], None)
+            
         except socket.error as err:
             logger.error("Error connect to remote server: {}".format(err))
             remote_soc.close()
@@ -210,7 +211,8 @@ def _remote_connect(addr_type, addr, port, sock_type=socket.SOCK_STREAM, domain_
                 return (codes.STATUS["CONNECTION"], None)
             elif err.errno == errno.EHOSTUNREACH:
                 return (codes.STATUS["HOST"], None)
-
+    else:
+        logger.warn("UDP Connection Temporily not Supported")
     """
     # Try to send data
     try:
@@ -235,7 +237,23 @@ def _remote_connect(addr_type, addr, port, sock_type=socket.SOCK_STREAM, domain_
     # Successful
     return (codes.STATUS["SUCCEED"], remote_soc)
 
-
+def heartBeat_tcp(data_raw, sock):
+    if data_raw:
+        return data_raw
+    
+    sock.settimeout(3)
+    try:
+        for i in range(3):
+            logger.error("HEATBEAT START")
+            sock.send(b"")
+            data =  sock.recv(4096)
+            logger.error("HEART: {}".format(data))
+            if data:
+                break
+    except socket.timeout:
+        logger.error("Time out: HeartBeat {}".format(sock))
+        sock.close()
+    return data
 
 if __name__ == "__main__":
     # _remote_connect(codes.ADDRESS["IPV4"], "118.184.184.70", 80)

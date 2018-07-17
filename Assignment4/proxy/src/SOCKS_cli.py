@@ -28,7 +28,7 @@ class Client(object):
         except socket.gaierror as err:
             logger.error("Can't connect to proxy server: {}".format(err))
             sys.exit(1)
-    
+
     def _negotiation(self, methods):
         try:
             # Send nego packet
@@ -37,7 +37,7 @@ class Client(object):
             return handler.negotiation_cli(self._cli_soc.recv(2048), self._cli_soc)
         except socket.error as e:
             raise
-        
+
     def _connection(self, addr_type, remote_addr, remote_port, request_type=codes.REQUEST["CONNECT"]):
         try:
             # Send connection packet
@@ -56,11 +56,11 @@ class Client(object):
                 sys.exit(1)
         except:
             raise
-        
+
         self._is_connected = True
         self._remote_addr = (remote_addr, remote_port)
         logger.info("Connect to {}:{} Successfully".format(remote_addr, remote_port))
-    
+
     def send_recv(self, raw_data):
         if not self._is_connected:
             logger.error("Not already connected to remoter server. Send failed")
@@ -69,11 +69,11 @@ class Client(object):
             logger.info("Connected to {}:{}. Start sending".format(*self._remote_addr))
             self._cli_soc.sendall(raw_data)
             print(self._cli_soc.recv(5096))
-    
+
 
 
 if __name__ == "__main__":
-    # Connect to 
+    # Connect to
     test = Client("127.0.0.1", 6233)
-    test.connect(codes.ADDRESS["IPV4"],"118.184.184.70", 80, codes.REQUEST["UDP"])
+    test.connect(codes.ADDRESS["DOMAIN"],"4399.com", 80, codes.REQUEST["CONNECT"])
     test.send_recv(b"GET / HTTP/1.0\r\n\r\n")
