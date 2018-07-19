@@ -50,7 +50,7 @@ if __name__ == "__main__":
     if out[0] == "server":
         server = proxy_srv.SocksServer(info.server_ip, info.server_port, info.password, info.ipv6)
     if out[0] == "local":
-        server = proxy_local.SocksServer(info.local_ip, info.local_port, info.password, info.proxy_server, info.server_port, info.ipv6, info.pac_file)
+        server = proxy_local.SocksServer(info.local_ip, info.local_port, info.password, info.proxy_server, info.server_port, info.ipv6, info.pac_file, info.userpass_file)
 
     # Start server
     server.start()

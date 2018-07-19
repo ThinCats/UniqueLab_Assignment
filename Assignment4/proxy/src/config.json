@@ -13,6 +13,7 @@
         "local_port": 6233,
         "password": "2333",
         "pac_file": "./black_list",
+        "userpass_file": "./token_lst",
         "ipv6": false
 
     }

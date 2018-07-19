@@ -9,6 +9,7 @@ import socket
 import logging
 import errno
 import struct
+import hmac
 
 logger = logging
 if __package__:
@@ -16,7 +17,7 @@ if __package__:
 else:
     from resolver import nego, connect, support, codes, udp, userpass
 
-def negotiation_srv(nego_recv_raw, srv_soc, user_method=None):
+def negotiation_srv(nego_recv_raw, srv_soc, user_method=None, support_methods=[codes.METHOD["NONEED"]], userpass_lst=None):
 
     # NEW ADDED
     # USER-SET
@@ -37,7 +38,7 @@ def negotiation_srv(nego_recv_raw, srv_soc, user_method=None):
         # Assign method
         for method in nego_recv[1]:
             # TODO: Algorithms for assigning methods
-            if method in support.methods:
+            if method in support_methods:
                 srv_method = method
                 break
     else:
@@ -50,7 +51,7 @@ def negotiation_srv(nego_recv_raw, srv_soc, user_method=None):
 
     # Userpass subnegotation
     if is_verify_ok and srv_method == codes.METHOD["USERPASS"]:
-        is_verify_ok = userpass_srv(srv_soc)
+        is_verify_ok = userpass_srv(srv_soc, userpass_lst)
     
     return is_verify_ok
 
@@ -83,7 +84,7 @@ def connection_srv(connect_recv_raw):
     return (remote_soc, connect_rep_raw)
 
 
-def userpass_srv(srv_soc):
+def userpass_srv(srv_soc, userpass_lst):
     # TODO: Password list!!!
     # Status: 0 means success
     status = 1
@@ -94,7 +95,8 @@ def userpass_srv(srv_soc):
         status = 1
 
     # TODO: ...
-    elif username == "brody" and password == "123":
+    token = hmac.new(password.encode("ascii"), username.encode("ascii")).hexdigest()
+    if token == userpass_lst.get(username):
         status = 0
     else:
         logger.warn("USERPASS FAILED: User or password invalid")

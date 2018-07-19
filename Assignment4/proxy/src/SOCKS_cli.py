@@ -4,11 +4,11 @@ import logging
 import sys
 
 if __package__:
-    from .resolver import codes, nego, connect, udp
-    from . import handler
+    from .SOCKS.resolver import codes, nego, connect, udp
+    from .SOCKS import handler
 else:
-    from resolver import codes, nego, connect, udp
-    import handler
+    from SOCKS.resolver import codes, nego, connect, udp
+    from SOCKS import handler
 
 
 logging.basicConfig(format='%(asctime)s %(levelname)-8s: %(message)s')

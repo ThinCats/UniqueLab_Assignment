@@ -16,13 +16,14 @@ class Server_info(object):
         
 
 class Local_info(object):
-    def __init__(self, *, proxy_server, server_port, local_ip, local_port, password, pac_file, ipv6):
+    def __init__(self, *, proxy_server, server_port, local_ip, local_port, password, pac_file, userpass_file, ipv6):
         self.proxy_server = proxy_server
         self.server_port = server_port
         self.local_ip = local_ip
         self.local_port = local_port
         self.password = password
         self.pac_file = pac_file
+        self.userpass_file = userpass_file
         self.ipv6 = ipv6
 
 class Config(object):

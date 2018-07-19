@@ -1,3 +1,4 @@
+import json
 if __package__:
     from .Server import *
 else:
@@ -27,7 +28,7 @@ class LocalHandler(ProxyHandler):
         # nego_cli_recv_raw = handler.heartBeat_tcp(self.request.recv(4096), self.request)
         nego_cli_recv_raw = self._recv(self.request, 4096, False)
 
-        is_verified_ok = handler.negotiation_srv(nego_cli_recv_raw, self.request)
+        is_verified_ok = handler.negotiation_srv(nego_cli_recv_raw, self.request, None, self.server.support_methods, self.server.userpass_lst)
         if not is_verified_ok:
             raise ThreadExit  # end request
         
@@ -106,11 +107,15 @@ class TCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
 
 class SocksServer(object):
 
-    def __init__(self, ip, port, password, server_addr, server_port, ipv6, pac_file=None, handler=LocalHandler):
+    def __init__(self, ip, port, password, server_addr, server_port, ipv6, pac_file=None, userpass_file=None, handler=LocalHandler):
+
         if ipv6:
             TCPServer.address_family = socket.AF_INET6
         
         self._server = TCPServer((ip, port), handler)
+
+        # Support method
+        self._server.support_methods = [codes.METHOD["NONEED"]]
         # Init cipher
         self._server.cryptor = cipher.RC4(password)
         # Proxy server addr
@@ -125,6 +130,16 @@ class SocksServer(object):
         except Exception:
             logger.warn("PAC File open failed. Ignore")
             self._server.pac_mode = False
+        
+        # USERPASS File
+        self._server.userpass_lst = None
+        try:
+            with open(userpass_file, "r") as f:
+                self._server.userpass_lst = json.load(f)
+                self._server.support_methods.append(codes.METHOD["USERPASS"])
+        except Exception as e:
+            logger.warn("USERPASS File open failed. Ignore {}".format(e))
+        
 
     def shutdown(self):
         self._server.shutdown()
