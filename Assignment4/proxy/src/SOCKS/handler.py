@@ -9,15 +9,15 @@ import socket
 import logging
 import errno
 import struct
+import hmac
 
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(filename)s %(lineno)d %(threadName)s %(levelname)-8s: %(message)s')
 logger = logging
 if __package__:
     from .resolver import nego, connect, support, codes, udp, userpass
 else:
     from resolver import nego, connect, support, codes, udp, userpass
 
-def negotiation_srv(nego_recv_raw, srv_soc, user_method=None):
+def negotiation_srv(nego_recv_raw, srv_soc, user_method=None, support_methods=[codes.METHOD["NONEED"]], userpass_lst=None):
 
     # NEW ADDED
     # USER-SET
@@ -38,11 +38,11 @@ def negotiation_srv(nego_recv_raw, srv_soc, user_method=None):
         # Assign method
         for method in nego_recv[1]:
             # TODO: Algorithms for assigning methods
-            if method in support.methods:
+            if method in support_methods:
                 srv_method = method
                 break
     else:
-        logger.warn("Client SOCKS Version Invalid. {}".format(nego_recv[0]))
+        logger.warn("Client SOCKS Version [{}] Invalid.".format(nego_recv[0]))
         is_verify_ok = False
     
     reply_raw = nego.srv_encode(srv_method)
@@ -51,7 +51,7 @@ def negotiation_srv(nego_recv_raw, srv_soc, user_method=None):
 
     # Userpass subnegotation
     if is_verify_ok and srv_method == codes.METHOD["USERPASS"]:
-        is_verify_ok = userpass_srv(srv_soc)
+        is_verify_ok = userpass_srv(srv_soc, userpass_lst)
     
     return is_verify_ok
 
@@ -84,7 +84,7 @@ def connection_srv(connect_recv_raw):
     return (remote_soc, connect_rep_raw)
 
 
-def userpass_srv(srv_soc):
+def userpass_srv(srv_soc, userpass_lst):
     # TODO: Password list!!!
     # Status: 0 means success
     status = 1
@@ -95,7 +95,8 @@ def userpass_srv(srv_soc):
         status = 1
 
     # TODO: ...
-    elif username == "brody" and password == "123":
+    token = hmac.new(password.encode("ascii"), username.encode("ascii")).hexdigest()
+    if token == userpass_lst.get(username):
         status = 0
     else:
         logger.warn("USERPASS FAILED: User or password invalid")
@@ -192,7 +193,7 @@ def _remote_connect(addr_type, addr, port, sock_type=socket.SOCK_STREAM, domain_
             return (codes.STATUS["NETWORK"], None)
     
     # default timeout
-    remote_soc.settimeout(3)
+    remote_soc.settimeout(5)
     # TCP:
     if sock_type == socket.SOCK_STREAM:
         try:
@@ -213,47 +214,24 @@ def _remote_connect(addr_type, addr, port, sock_type=socket.SOCK_STREAM, domain_
                 return (codes.STATUS["HOST"], None)
     else:
         logger.warn("UDP Connection Temporily not Supported")
-    """
-    # Try to send data
-    try:
-        if sock_type == socket.SOCK_STREAM:
-            remote_soc.sendall(b"GET / HTTP/1.0\r\n\r\n")
-        else:
-            remote_soc.sendto(b"GET / HTTP/1.0\r\n\r\n", (addr, port))
-    except socket.error as err:
-        logger.error("Sending data: {}".format(err))
-        remote_soc.close()
-        if err.errno == errno.EHOSTUNREACH:
-            return (codes.STATUS["HOST"], None)
-
-    # try receive data
-    try:
-        buffer = remote_soc.recv(2048)
-    except socket.error as err:
-        # remote_soc.close()
-        print(remote_soc.type)
-        logger.error("Receiving data: {}".format(err))
-    """
     # Successful
+    # Recover its timeout
+    remote_soc.settimeout(10)
     return (codes.STATUS["SUCCEED"], remote_soc)
 
-def heartBeat_tcp(data_raw, sock):
-    if data_raw:
-        return data_raw
-    
-    sock.settimeout(3)
-    try:
-        for i in range(3):
-            logger.error("HEATBEAT START")
-            sock.send(b"")
-            data =  sock.recv(4096)
-            logger.error("HEART: {}".format(data))
-            if data:
-                break
-    except socket.timeout:
-        logger.error("Time out: HeartBeat {}".format(sock))
-        sock.close()
-    return data
+def pac_filter(domain, word_list):
+    """
+    Filter the website to decides whther go to proxy
+    word_list: a set
+    """
+    out  =domain.split(".")
+    short_domain = out[-2] + "." + out[-1]
+    if short_domain in word_list:
+        return False
+    else:
+        return True
+
+
 
 if __name__ == "__main__":
     # _remote_connect(codes.ADDRESS["IPV4"], "118.184.184.70", 80)

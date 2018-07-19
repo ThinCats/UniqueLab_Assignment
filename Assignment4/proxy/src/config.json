@@ -1,0 +1,21 @@
+{
+    "server": {
+        "server_ip": "0.0.0.0",
+        "server_port": 9899,
+        "password": "2333",
+        "ipv6": false
+
+    },
+    "local": {
+        "proxy_server": "127.0.0.1",
+        "server_port": 9899,
+        "local_ip": "127.0.0.1",
+        "local_port": 6233,
+        "password": "2333",
+        "pac_file": "./black_list",
+        "userpass_file": "./token_lst",
+        "ipv6": false
+
+    }
+}
+
