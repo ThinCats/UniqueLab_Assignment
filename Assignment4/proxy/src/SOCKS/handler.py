@@ -13,9 +13,9 @@ import hmac
 
 logger = logging
 if __package__:
-    from .resolver import nego, connect, support, codes, udp, userpass
+    from .resolver import nego, connect, codes, udp, userpass
 else:
-    from resolver import nego, connect, support, codes, udp, userpass
+    from resolver import nego, connect, codes, udp, userpass
 
 def negotiation_srv(nego_recv_raw, srv_soc, user_method=None, support_methods=[codes.METHOD["NONEED"]], userpass_lst=None):
 
@@ -25,10 +25,7 @@ def negotiation_srv(nego_recv_raw, srv_soc, user_method=None, support_methods=[c
         srv_soc.sendall(nego.srv_encode(user_method))
         return not user_method == codes.METHOD["REFUSE"]
     ## END
-
-    
     nego_recv = nego.srv_decode(nego_recv_raw)
-    # print("Nego recv data: {}".format(nego_recv))
 
     # Reply
     srv_method = codes.METHOD["REFUSE"]
@@ -46,7 +43,6 @@ def negotiation_srv(nego_recv_raw, srv_soc, user_method=None, support_methods=[c
         is_verify_ok = False
     
     reply_raw = nego.srv_encode(srv_method)
-    # print("Nego reply raw data: {}".format(reply_raw))
     srv_soc.sendall(reply_raw)
 
     # Userpass subnegotation
@@ -58,8 +54,7 @@ def negotiation_srv(nego_recv_raw, srv_soc, user_method=None, support_methods=[c
 def connection_srv(connect_recv_raw):
 
     connect_recv = connect.srv_decode(connect_recv_raw)
-    # print("Connect recv data: {}".format(connect_recv))
-    
+
     # Remote socket
     remote_soc = None
     srv_status = None
@@ -95,7 +90,7 @@ def userpass_srv(srv_soc, userpass_lst):
         status = 1
 
     # TODO: ...
-    token = hmac.new(password.encode("ascii"), username.encode("ascii")).hexdigest()
+    token = hmac.new(password.strip().encode("ascii"), username.strip().encode("ascii")).hexdigest()
     if token == userpass_lst.get(username):
         status = 0
     else:
@@ -105,14 +100,12 @@ def userpass_srv(srv_soc, userpass_lst):
     return status == 0
 
 
-
 """
 Use false or True to determine whether terminate the connection
 It's only for TCP
 """
 def negotiation_cli(nego_recv_raw, cli_soc):
     nego_recv = nego.cli_decode(nego_recv_raw)
-    # print("Nego recv data: {}".format(nego_recv))
 
     # Version mismatch or Server refused
     if not nego_recv[0] == codes.VERSION["SOCKS5"] or nego_recv[1] == codes.METHOD["REFUSE"]:
@@ -137,9 +130,7 @@ def userpass_cli(username, password, cli_soc):
     cli_soc.sendall(userpass_rep_raw)
     userpass_recv_raw = cli_soc.recv(2048)
 
-    # print("Client userpass recv raw data: {}".format(userpass_recv_raw))
     userpass_recv = userpass.cli_decode(userpass_recv_raw)
-    # print("Client userpass recv data: {}".format(userpass_recv))
 
     # Version check and verify USERPASS
     if not userpass_recv[0] == codes.SUBVERSION["USERPASS"]:
@@ -158,7 +149,6 @@ If True, return (addr_type, (addr, port))
 """
 def connection_cli(connect_recv_raw):
     connect_recv = connect.cli_decode(connect_recv_raw)
-    # print("Client connect recv data: {}".format(connect_recv))
 
     if connect_recv[0] == codes.VERSION["SOCKS5"] and connect_recv[1] == codes.STATUS["SUCCEED"]:
         return connect_recv[2:]

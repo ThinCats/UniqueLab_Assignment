@@ -138,7 +138,7 @@ class NegoHandler(socketserver.BaseRequestHandler):
         logger.debug("Thread Exit")
 
 
-class LocalServer(object):
+class TraServer(object):
     def __init__(self, ip, port, password, server_info, handler=NegoHandler):
 
         TCPServer.address_family = server_info.address_family
@@ -163,7 +163,7 @@ class LocalServer(object):
 if __name__ == "__main__":
     server_info = Info_server(socket.AF_INET, socket.SOCK_STREAM)
 
-    server = LocalServer("127.0.0.1", 9899, "2333", server_info)
+    server = TraServer("127.0.0.1", 9899, "2333", server_info)
     server.start()
 
 

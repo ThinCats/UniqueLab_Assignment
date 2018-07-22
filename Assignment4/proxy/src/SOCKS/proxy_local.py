@@ -63,8 +63,10 @@ class LocalHandler(ProxyHandler):
         # PAC MODE
         if self.server.pac_mode:
             connect_cli_recv = connect.srv_decode(connect_cli_recv_raw)
+            # IP will not take in 
             if (connect_cli_recv[2]==codes.ADDRESS["DOMAIN"]):
                 if handler.pac_filter(connect_cli_recv[3][0], self.server.pac_wordlist):
+                    # Change server to remote
                     self._to_srv_soc.close()
                     logger.info("PAC mode: {}:{}".format(*connect_cli_recv[3]))
                     self._to_srv_soc, connect_send_raw = handler.connection_srv(connect_cli_recv_raw)

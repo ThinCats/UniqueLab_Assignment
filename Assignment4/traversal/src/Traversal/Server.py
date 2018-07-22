@@ -20,23 +20,7 @@ else:
 logger = logging
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(threadName)s %(levelname)-8s: %(message)s')
 
-class Info_local(object):
-    """
-    This is for passing basic info to handler
-    """
-    def __init__(self, wanted_srv_port, wanted_local_port, request, address_family, socket_type, srv_ip, srv_port):
-        self.wanted_srv_port = wanted_srv_port
-        self.wanted_local_port = wanted_local_port
-        self.address_family = address_family
-        self.socket_type = socket_type
-        self.srv_ip = srv_ip
-        self.srv_port = srv_port
-        self.request = request
 
-class Info_server(object):
-    def __init__(self, address_family, socket_type):
-        self.address_family = address_family
-        self.socket_type = socket_type
 
 class Handler(socketserver.BaseRequestHandler):
 

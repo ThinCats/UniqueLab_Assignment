@@ -25,7 +25,7 @@
             j = (j+S[i]) % 256
             S[i], S[j] = S[j], S[i]
             t = (S[i] + S[j]) % 256
-            R[r] = S[t]
+            C[r] = S[t]
         ```
 
         
@@ -40,14 +40,14 @@
 
         ```python
         # Init 顺序排列
-        S = [i for i in range(255)]
+        S = [i for i in range(256)]
         ```
 
       * 初始排列S
 
         ```python
         # 乱序排列
-        for i in range(255):
+        for i in range(256):
             j = (j + S[i] + T[i]) % 256
             S[i], S[j] = S[j], S[i]
         ```

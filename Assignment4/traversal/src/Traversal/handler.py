@@ -42,18 +42,17 @@ def connect_srv(to_cli_soc, server_info, cryptor, handler):
         # Handle request:
         is_ok = True
         if data_decoded[1] == codes.REQUEST["FORWARD"]:
+            # New a tunnel Server
             try:
+                socketserver.ThreadingTCPServer.address_family = server_info.address_family
                 if server_info.socket_type == socket.SOCK_STREAM:
-                    socketserver.ThreadingTCPServer.address_family = server_info.address_family
                     binded_server = socketserver.ThreadingTCPServer(("0.0.0.0", data_decoded[2]), handler)
                 elif server_info.socket_type == socket.SOCK_DGRAM:
-                    socketserver.ThreadingUDPServer.address_family = server_info.address_family
                     binded_server = socketserver.ThreadingUDPServer(("0.0.0.0", data_decoded[2]), handler)
                 else:
                     logging.error("Unsupport addr_family {}".format(server_info.address_family))
             except socket.error as e:
                 logging.error("Failed {}".format(e))
-                print(data_decoded[2])
                 binded_server = None
                 status = codes.STATUS["PORT"]
                 is_ok = False
