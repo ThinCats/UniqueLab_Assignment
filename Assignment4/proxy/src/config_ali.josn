@@ -7,7 +7,7 @@
 
     },
     "local": {
-        "proxy_server": "127.0.0.1",
+        "proxy_server": "47.106.22.242",
         "server_port": 8888,
         "local_ip": "127.0.0.1",
         "local_port": 6233,

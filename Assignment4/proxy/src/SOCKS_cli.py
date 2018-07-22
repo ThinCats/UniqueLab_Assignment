@@ -17,7 +17,7 @@ logger.setLevel(logging.DEBUG)
 # methods -> (, ,)
 class Client(object):
 
-    support_methods = (codes.METHOD["NONEED"], codes.METHOD["USERPASS"])
+    support_methods = (codes.METHOD["NONEED"], codes.METHOD["NONEED"])
 
     def __init__(self, proxy_addr, proxy_port):
         self._is_connected = False
@@ -50,7 +50,7 @@ class Client(object):
     def connect(self, addr_type, remote_addr, remote_port, request_type=codes.REQUEST["CONNECT"]):
         # Communication with server
         try:
-            if not self._negotiation((codes.METHOD["USERPASS"],)):
+            if not self._negotiation((codes.METHOD["NONEED"],)):
                 sys.exit(1)
             if not self._connection(addr_type, remote_addr, remote_port, request_type):
                 sys.exit(1)

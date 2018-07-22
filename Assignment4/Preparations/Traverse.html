@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<!-- saved from url=(0059)file:///home/brody/Documents/vnote_notebooks/vnotebook/Net/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <style type="text/css">
+    /* STYLE_GLOBAL_PLACE_HOLDER */
+    </style>
+
+    <style type="text/css">
+        @keyframes flash {
+            0% { color: #DFAF5F; }
+            10% { color: #D89F3E; }
+            40% { color: #D89F3E; }
+            50% { color: #DFAF5F; }
+            60% { color: #D89F3E; }
+            90% { color: #D89F3E; }
+        }
+
+        .highlighted-anchor {
+            animation: 1s flash;
+        }
+    </style>
+
+    <link rel="stylesheet" type="text/css" href="qrc:/resources/view_image.css">
+    <link rel="stylesheet" type="text/css" href="./Traverse_files/v_detorte.css">
+    <link rel="stylesheet" type="text/css" href="./Traverse_files/v_detorte_codeblock.css">
+    <script src="qrc:/resources/qwebchannel.js"></script>
+    <script src="qrc:/utils/highlightjs/highlight.pack.js"></script>
+    <script src="qrc:/utils/markdown-it/markdown-it.min.js"></script>
+<script src="qrc:/utils/markdown-it/markdown-it-headinganchor.js"></script>
+<script src="qrc:/utils/markdown-it/markdown-it-task-lists.min.js"></script>
+<script src="qrc:/utils/markdown-it/markdown-it-imsize.min.js"></script>
+<script src="qrc:/utils/markdown-it/markdown-it-footnote.min.js"></script>
+<script src="qrc:/utils/markdown-it/markdown-it-texmath.js"></script>
+<script src="qrc:/utils/markdown-it/markdown-it-front-matter.js"></script>
+<script>var VMarkdownitOption = {html: true,
+breaks: true,
+linkify: false,
+sub: false,
+sup: false,
+metadata: true,
+emoji: false };
+</script>
+<link rel="stylesheet" type="text/css" href="./Traverse_files/v_detorte_mermaid.css">
+<script src="qrc:/utils/mermaid/mermaidAPI.min.js"></script>
+<script>var VEnableMermaid = true;</script>
+<script src="qrc:/utils/flowchart.js/raphael.min.js"></script>
+<script src="qrc:/utils/flowchart.js/flowchart.min.js"></script>
+<script>var VEnableFlowchart = true;</script>
+<script type="text/x-mathjax-config;executed=true">MathJax.Hub.Config({
+                    tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']],
+processEscapes: true,
+processClass: "tex2jax_process|language-mathjax|lang-mathjax"},
+                    showProcessingMessages: false,
+                    skipStartupTypeset: true,
+                    messageStyle: "none"});
+MathJax.Hub.Register.StartupHook("End", function() { handleMathjaxReady(); });
+</script>
+<script type="text/javascript" async="" src="./Traverse_files/MathJax.js"></script>
+<script>var VEnableMathjax = true;</script>
+<script>var VPlantUMLMode = 2;</script>
+<script>var VPlantUMLFormat = 'svg';</script>
+<script>var VEnableGraphviz = true;</script>
+<script>var VGraphvizFormat = 'svg';</script>
+<script src="qrc:/utils/highlightjs/highlightjs-line-numbers.min.js"></script><style type="text/css">.hljs-ln{border-collapse:collapse}.hljs-ln td{padding:0}.hljs-ln-n:before{content:attr(data-line-number)}</style>
+<script>var VEnableHighlightLineNumber = true;</script>
+<script>var VEnableFlashAnchor = true;</script>
+<script>var VStylesToInline = 'all$border:color:display:font-family:font-size:font-style:white-space:word-spacing:line-height:text-align:text-indent:padding-top:padding-bottom:margin-top:margin-bottom:background-color:font-weight,code$font-family:font-size:line-height:color:display:overfow-x:background-color:font-weight,li$line-height:background-color:font-weight,a$color:vertical-align:background-color:font-weight,pre$display:overflow-y:overflow-x:color:font-size:font-style:font-weight:letter-spacing:text-align:text-indent:word-spacing:background-color';</script>
+<script>var VOS = 'linux';</script>
+
+    <script src="qrc:/resources/markdown-it.js" defer=""></script>
+    <script src="qrc:/resources/view_image.js" defer=""></script>
+    <script src="qrc:/resources/markdown_template.js" defer=""></script>
+<style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Menu_Button .MathJax_Hover_Arrow {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px; font-family: 'Courier New',Courier; font-size: 9px; color: #F0F0F0}
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {display: block; background-color: #AAA; border: 1px solid; border-radius: 3px; line-height: 0; padding: 4px}
+.MathJax_Hover_Arrow:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_Hover_Arrow:hover span {background-color: #CCC!important}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_About.MathJax_MousePost {outline: none}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 5px 0px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 5px; -webkit-border-radius: 5px; -moz-border-radius: 5px; -khtml-border-radius: 5px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 1px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; padding-top: .25em; color: #666666; font-size: .75em}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: .7em}
+.MathJax_MenuRadioCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuLabel {padding: 1px 2em 3px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #DDDDDD; margin: 4px 3px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: #606872; color: white}
+.MathJax_MenuDisabled:focus, .MathJax_MenuLabel:focus {background-color: #E8E8E8}
+.MathJax_ContextMenu:focus {outline: none}
+.MathJax_ContextMenu .MathJax_MenuItem:focus {outline: none}
+#MathJax_AboutClose {top: .2em; right: .2em}
+.MathJax_Menu .MathJax_MenuClose {top: -10px; left: -10px}
+.MathJax_MenuClose {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; font-family: 'Courier New',Courier; font-size: 24px; color: #F0F0F0}
+.MathJax_MenuClose span {display: block; background-color: #AAA; border: 1.5px solid; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; line-height: 0; padding: 8px 0 6px}
+.MathJax_MenuClose:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_MenuClose:hover span {background-color: #CCC!important}
+.MathJax_MenuClose:hover:focus {outline: none}
+</style><style type="text/css">.MathJax_Preview .MJXf-math {color: inherit!important}
+</style><style type="text/css">.MJX_Assistive_MathML {position: absolute!important; top: 0; left: 0; clip: rect(1px, 1px, 1px, 1px); padding: 1px 0 0 0!important; border: 0!important; height: 1px!important; width: 1px!important; overflow: hidden!important; display: block!important; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none}
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {width: 100%!important}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1px; bottom: 2px; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><style type="text/css">.MJXp-script {font-size: .8em}
+.MJXp-right {-webkit-transform-origin: right; -moz-transform-origin: right; -ms-transform-origin: right; -o-transform-origin: right; transform-origin: right}
+.MJXp-bold {font-weight: bold}
+.MJXp-italic {font-style: italic}
+.MJXp-scr {font-family: MathJax_Script,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-frak {font-family: MathJax_Fraktur,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-sf {font-family: MathJax_SansSerif,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-cal {font-family: MathJax_Caligraphic,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-mono {font-family: MathJax_Typewriter,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-largeop {font-size: 150%}
+.MJXp-largeop.MJXp-int {vertical-align: -.2em}
+.MJXp-math {display: inline-block; line-height: 1.2; text-indent: 0; font-family: 'Times New Roman',Times,STIXGeneral,serif; white-space: nowrap; border-collapse: collapse}
+.MJXp-display {display: block; text-align: center; margin: 1em 0}
+.MJXp-math span {display: inline-block}
+.MJXp-box {display: block!important; text-align: center}
+.MJXp-box:after {content: " "}
+.MJXp-rule {display: block!important; margin-top: .1em}
+.MJXp-char {display: block!important}
+.MJXp-mo {margin: 0 .15em}
+.MJXp-mfrac {margin: 0 .125em; vertical-align: .25em}
+.MJXp-denom {display: inline-table!important; width: 100%}
+.MJXp-denom > * {display: table-row!important}
+.MJXp-surd {vertical-align: top}
+.MJXp-surd > * {display: block!important}
+.MJXp-script-box > *  {display: table!important; height: 50%}
+.MJXp-script-box > * > * {display: table-cell!important; vertical-align: top}
+.MJXp-script-box > *:last-child > * {vertical-align: bottom}
+.MJXp-script-box > * > * > * {display: block!important}
+.MJXp-mphantom {visibility: hidden}
+.MJXp-munderover {display: inline-table!important}
+.MJXp-over {display: inline-block!important; text-align: center}
+.MJXp-over > * {display: block!important}
+.MJXp-munderover > * {display: table-row!important}
+.MJXp-mtable {vertical-align: .25em; margin: 0 .125em}
+.MJXp-mtable > * {display: inline-table!important; vertical-align: middle}
+.MJXp-mtr {display: table-row!important}
+.MJXp-mtd {display: table-cell!important; text-align: center; padding: .5em 0 0 .5em}
+.MJXp-mtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-mlabeledtr {display: table-row!important}
+.MJXp-mlabeledtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mlabeledtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MJXp-scale0 {-webkit-transform: scaleX(.0); -moz-transform: scaleX(.0); -ms-transform: scaleX(.0); -o-transform: scaleX(.0); transform: scaleX(.0)}
+.MJXp-scale1 {-webkit-transform: scaleX(.1); -moz-transform: scaleX(.1); -ms-transform: scaleX(.1); -o-transform: scaleX(.1); transform: scaleX(.1)}
+.MJXp-scale2 {-webkit-transform: scaleX(.2); -moz-transform: scaleX(.2); -ms-transform: scaleX(.2); -o-transform: scaleX(.2); transform: scaleX(.2)}
+.MJXp-scale3 {-webkit-transform: scaleX(.3); -moz-transform: scaleX(.3); -ms-transform: scaleX(.3); -o-transform: scaleX(.3); transform: scaleX(.3)}
+.MJXp-scale4 {-webkit-transform: scaleX(.4); -moz-transform: scaleX(.4); -ms-transform: scaleX(.4); -o-transform: scaleX(.4); transform: scaleX(.4)}
+.MJXp-scale5 {-webkit-transform: scaleX(.5); -moz-transform: scaleX(.5); -ms-transform: scaleX(.5); -o-transform: scaleX(.5); transform: scaleX(.5)}
+.MJXp-scale6 {-webkit-transform: scaleX(.6); -moz-transform: scaleX(.6); -ms-transform: scaleX(.6); -o-transform: scaleX(.6); transform: scaleX(.6)}
+.MJXp-scale7 {-webkit-transform: scaleX(.7); -moz-transform: scaleX(.7); -ms-transform: scaleX(.7); -o-transform: scaleX(.7); transform: scaleX(.7)}
+.MJXp-scale8 {-webkit-transform: scaleX(.8); -moz-transform: scaleX(.8); -ms-transform: scaleX(.8); -o-transform: scaleX(.8); transform: scaleX(.8)}
+.MJXp-scale9 {-webkit-transform: scaleX(.9); -moz-transform: scaleX(.9); -ms-transform: scaleX(.9); -o-transform: scaleX(.9); transform: scaleX(.9)}
+.MathJax_PHTML .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style></head>
+<body><div id="MathJax_Message" style="display: none;"></div>
+    <div id="content-div" style="display: block;"><h1 id="toc_0" class="highlighted-anchor"><a name="toc_0" class="vnote-anchor" href="file:///home/brody/Documents/vnote_notebooks/vnotebook/Net/#"></a>Traversal</h1>
+<ol>
+<li>Traversal Server</li>
+</ol>
+<div class="plantuml-diagram"><!--?xml version="1.0" encoding="UTF-8" standalone="no"?--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentscripttype="application/ecmascript" contentstyletype="text/css" height="973px" preserveAspectRatio="none" style="width:412px;height:973px;" version="1.1" viewBox="0 0 412 973" width="412px" zoomAndPan="magnify" class="view-svg"><defs><filter height="300%" id="f109hia3xsgcxe" width="300%" x="-1" y="-1"><fegaussianblur result="blurOut" stdDeviation="2.0"></fegaussianblur><fecolormatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"></fecolormatrix><feoffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"></feoffset><feblend in="SourceGraphic" in2="blurOut3" mode="normal"></feblend></filter></defs><g><rect fill="#FFFFFF" filter="url(#f109hia3xsgcxe)" height="205.4648" style="stroke: #000000; stroke-width: 2.0;" width="227" x="81" y="105.3203"></rect><rect fill="#FFFFFF" filter="url(#f109hia3xsgcxe)" height="141.4414" style="stroke: #000000; stroke-width: 2.0;" width="207" x="91" y="162.3438"></rect><rect fill="#FFFFFF" height="91.418" style="stroke: none; stroke-width: 1.0;" width="207" x="91" y="212.3672"></rect><rect fill="#FFFFFF" filter="url(#f109hia3xsgcxe)" height="293.4883" style="stroke: #000000; stroke-width: 2.0;" width="271.5" x="81" y="324.7852"></rect><rect fill="#FFFFFF" filter="url(#f109hia3xsgcxe)" height="141.4414" style="stroke: #000000; stroke-width: 2.0;" width="207" x="91" y="469.832"></rect><rect fill="#FFFFFF" height="47.4063" style="stroke: none; stroke-width: 1.0;" width="207" x="91" y="563.8672"></rect><rect fill="#FFFFFF" filter="url(#f109hia3xsgcxe)" height="235.0938" style="stroke: #000000; stroke-width: 2.0;" width="388.5" x="13" y="632.2734"></rect><line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="57" x2="57" y1="88.3203" y2="884.3672"></line><line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="138" x2="138" y1="88.3203" y2="884.3672"></line><line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="244" x2="244" y1="88.3203" y2="884.3672"></line><line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="356.5" x2="356.5" y1="88.3203" y2="884.3672"></line><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="62" x="23" y="84.6016">localHTTP</text><ellipse cx="57" cy="13" fill="#FEFECE" filter="url(#f109hia3xsgcxe)" rx="8" ry="8" style="stroke: #A80036; stroke-width: 2.0;"></ellipse><path d="M57,21 L57,48 M44,29 L70,29 M57,48 L44,63 M57,48 L70,63 " fill="none" filter="url(#f109hia3xsgcxe)" style="stroke: #A80036; stroke-width: 2.0;"></path><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="62" x="23" y="897.9688">localHTTP</text><ellipse cx="57" cy="911.6875" fill="#FEFECE" filter="url(#f109hia3xsgcxe)" rx="8" ry="8" style="stroke: #A80036; stroke-width: 2.0;"></ellipse><path d="M57,919.6875 L57,946.6875 M44,927.6875 L70,927.6875 M57,946.6875 L44,961.6875 M57,946.6875 L70,961.6875 " fill="none" filter="url(#f109hia3xsgcxe)" style="stroke: #A80036; stroke-width: 2.0;"></path><rect fill="#FEFECE" filter="url(#f109hia3xsgcxe)" height="32.3203" style="stroke: #A80036; stroke-width: 1.5;" width="71" x="101" y="51"></rect><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="57" x="108" y="72.6016">localTrav</text><rect fill="#FEFECE" filter="url(#f109hia3xsgcxe)" height="32.3203" style="stroke: #A80036; stroke-width: 1.5;" width="71" x="101" y="883.3672"></rect><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="57" x="108" y="904.9688">localTrav</text><rect fill="#FEFECE" filter="url(#f109hia3xsgcxe)" height="32.3203" style="stroke: #A80036; stroke-width: 1.5;" width="83" x="201" y="51"></rect><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="69" x="208" y="72.6016">ServerTrav</text><rect fill="#FEFECE" filter="url(#f109hia3xsgcxe)" height="32.3203" style="stroke: #A80036; stroke-width: 1.5;" width="83" x="201" y="883.3672"></rect><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="69" x="208" y="904.9688">ServerTrav</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="64" x="321.5" y="84.6016">remoteCli</text><ellipse cx="356.5" cy="13" fill="#FEFECE" filter="url(#f109hia3xsgcxe)" rx="8" ry="8" style="stroke: #A80036; stroke-width: 2.0;"></ellipse><path d="M356.5,21 L356.5,48 M343.5,29 L369.5,29 M356.5,48 L343.5,63 M356.5,48 L369.5,63 " fill="none" filter="url(#f109hia3xsgcxe)" style="stroke: #A80036; stroke-width: 2.0;"></path><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="64" x="321.5" y="897.9688">remoteCli</text><ellipse cx="356.5" cy="911.6875" fill="#FEFECE" filter="url(#f109hia3xsgcxe)" rx="8" ry="8" style="stroke: #A80036; stroke-width: 2.0;"></ellipse><path d="M356.5,919.6875 L356.5,946.6875 M343.5,927.6875 L369.5,927.6875 M356.5,946.6875 L343.5,961.6875 M356.5,946.6875 L369.5,961.6875 " fill="none" filter="url(#f109hia3xsgcxe)" style="stroke: #A80036; stroke-width: 2.0;"></path><path d="M81,105.3203 L201,105.3203 L201,114.3203 L191,124.3203 L81,124.3203 L81,105.3203 " fill="#EEEEEE" style="stroke: #000000; stroke-width: 1.0;"></path><rect fill="none" height="205.4648" style="stroke: #000000; stroke-width: 2.0;" width="227" x="81" y="105.3203"></rect><text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="75" x="96" y="119.8789">Handshake</text><polygon fill="#A80036" points="232.5,143.3438,242.5,147.3438,232.5,151.3438,236.5,147.3438" style="stroke: #A80036; stroke-width: 1.0;"></polygon><line style="stroke: #A80036; stroke-width: 1.0;" x1="138.5" x2="238.5" y1="147.3438" y2="147.3438"></line><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="30" x="145.5" y="141.8906">Hello</text><path d="M91,162.3438 L153,162.3438 L153,171.3438 L143,181.3438 L91,181.3438 L91,162.3438 " fill="#EEEEEE" style="stroke: #000000; stroke-width: 1.0;"></path><rect fill="none" height="141.4414" style="stroke: #000000; stroke-width: 2.0;" width="207" x="91" y="162.3438"></rect><text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="17" x="106" y="176.9023">alt</text><text fill="#000000" font-family="sans-serif" font-size="11" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="96" x="168" y="175.8164">[Successful decrypt]</text><polygon fill="#A80036" points="149.5,200.3672,139.5,204.3672,149.5,208.3672,145.5,204.3672" style="stroke: #A80036; stroke-width: 1.0;"></polygon><line style="stroke: #A80036; stroke-width: 1.0;" x1="143.5" x2="243.5" y1="204.3672" y2="204.3672"></line><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="55" x="155.5" y="198.9141">OK. Num</text><line style="stroke: #000000; stroke-width: 1.0; stroke-dasharray: 2.0,2.0;" x1="91" x2="298" y1="213.3672" y2="213.3672"></line><text fill="#000000" font-family="sans-serif" font-size="11" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="96" x="96" y="224.8398">[Failed in decrpting]</text><polygon fill="#A80036" points="149.5,247.7734,139.5,251.7734,149.5,255.7734,145.5,251.7734" style="stroke: #A80036; stroke-width: 1.0;"></polygon><line style="stroke: #A80036; stroke-width: 1.0;" x1="143.5" x2="243.5" y1="251.7734" y2="251.7734"></line><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="24" x="155.5" y="246.3203">NO.</text><line style="stroke: #A80036; stroke-width: 1.0;" x1="138.5" x2="180.5" y1="282.7852" y2="282.7852"></line><line style="stroke: #A80036; stroke-width: 1.0;" x1="180.5" x2="180.5" y1="282.7852" y2="295.7852"></line><line style="stroke: #A80036; stroke-width: 1.0;" x1="139.5" x2="180.5" y1="295.7852" y2="295.7852"></line><polygon fill="#A80036" points="149.5,291.7852,139.5,295.7852,149.5,299.7852,145.5,295.7852" style="stroke: #A80036; stroke-width: 1.0;"></polygon><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="92" x="145.5" y="277.332">End connection</text><path d="M81,324.7852 L206,324.7852 L206,333.7852 L196,343.7852 L81,343.7852 L81,324.7852 " fill="#EEEEEE" style="stroke: #000000; stroke-width: 1.0;"></path><rect fill="none" height="293.4883" style="stroke: #000000; stroke-width: 2.0;" width="271.5" x="81" y="324.7852"></rect><text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="80" x="96" y="339.3438">Negotiation</text><line style="stroke: #A80036; stroke-width: 1.0;" x1="138.5" x2="180.5" y1="366.8086" y2="366.8086"></line><line style="stroke: #A80036; stroke-width: 1.0;" x1="180.5" x2="180.5" y1="366.8086" y2="379.8086"></line><line style="stroke: #A80036; stroke-width: 1.0;" x1="139.5" x2="180.5" y1="379.8086" y2="379.8086"></line><polygon fill="#A80036" points="149.5,375.8086,139.5,379.8086,149.5,383.8086,145.5,379.8086" style="stroke: #A80036; stroke-width: 1.0;"></polygon><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="79" x="145.5" y="361.3555">regen cryptor</text><polygon fill="#A80036" points="232.5,406.8203,242.5,410.8203,232.5,414.8203,236.5,410.8203" style="stroke: #A80036; stroke-width: 1.0;"></polygon><line style="stroke: #A80036; stroke-width: 1.0;" x1="138.5" x2="238.5" y1="410.8203" y2="410.8203"></line><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="81" x="145.5" y="405.3672">I want port 80</text><line style="stroke: #A80036; stroke-width: 1.0;" x1="244.5" x2="286.5" y1="441.832" y2="441.832"></line><line style="stroke: #A80036; stroke-width: 1.0;" x1="286.5" x2="286.5" y1="441.832" y2="454.832"></line><line style="stroke: #A80036; stroke-width: 1.0;" x1="245.5" x2="286.5" y1="454.832" y2="454.832"></line><polygon fill="#A80036" points="255.5,450.832,245.5,454.832,255.5,458.832,251.5,454.832" style="stroke: #A80036; stroke-width: 1.0;"></polygon><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="89" x="251.5" y="436.3789">Link l to port 80</text><path d="M91,469.832 L153,469.832 L153,478.832 L143,488.832 L91,488.832 L91,469.832 " fill="#EEEEEE" style="stroke: #000000; stroke-width: 1.0;"></path><rect fill="none" height="141.4414" style="stroke: #000000; stroke-width: 2.0;" width="207" x="91" y="469.832"></rect><text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="17" x="106" y="484.3906">alt</text><text fill="#000000" font-family="sans-serif" font-size="11" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="73" x="168" y="483.3047">[Port is binded]</text><polygon fill="#A80036" points="149.5,507.8555,139.5,511.8555,149.5,515.8555,145.5,511.8555" style="stroke: #A80036; stroke-width: 1.0;"></polygon><line style="stroke: #A80036; stroke-width: 1.0;" x1="143.5" x2="243.5" y1="511.8555" y2="511.8555"></line><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="34" x="155.5" y="506.4023">Failed</text><line style="stroke: #A80036; stroke-width: 1.0;" x1="138.5" x2="180.5" y1="542.8672" y2="542.8672"></line><line style="stroke: #A80036; stroke-width: 1.0;" x1="180.5" x2="180.5" y1="542.8672" y2="555.8672"></line><line style="stroke: #A80036; stroke-width: 1.0;" x1="139.5" x2="180.5" y1="555.8672" y2="555.8672"></line><polygon fill="#A80036" points="149.5,551.8672,139.5,555.8672,149.5,559.8672,145.5,555.8672" style="stroke: #A80036; stroke-width: 1.0;"></polygon><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="23" x="145.5" y="537.4141">End</text><line style="stroke: #000000; stroke-width: 1.0; stroke-dasharray: 2.0,2.0;" x1="91" x2="298" y1="564.8672" y2="564.8672"></line><text fill="#000000" font-family="sans-serif" font-size="11" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="43" x="96" y="576.3398">[Port OK]</text><polygon fill="#A80036" points="149.5,599.2734,139.5,603.2734,149.5,607.2734,145.5,603.2734" style="stroke: #A80036; stroke-width: 1.0;"></polygon><line style="stroke: #A80036; stroke-width: 1.0;" x1="143.5" x2="243.5" y1="603.2734" y2="603.2734"></line><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="18" x="155.5" y="597.8203">OK</text><path d="M13,632.2734 L116,632.2734 L116,641.2734 L106,651.2734 L13,651.2734 L13,632.2734 " fill="#EEEEEE" style="stroke: #000000; stroke-width: 1.0;"></path><rect fill="none" height="235.0938" style="stroke: #000000; stroke-width: 2.0;" width="388.5" x="13" y="632.2734"></rect><text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="58" x="28" y="646.832">Traverse</text><polygon fill="#A80036" points="255.5,670.2969,245.5,674.2969,255.5,678.2969,251.5,674.2969" style="stroke: #A80036; stroke-width: 1.0;"></polygon><line style="stroke: #A80036; stroke-width: 1.0;" x1="249.5" x2="355.5" y1="674.2969" y2="674.2969"></line><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="261.5" y="668.8438">Get /</text><line style="stroke: #A80036; stroke-width: 1.0;" x1="244.5" x2="286.5" y1="722.3203" y2="722.3203"></line><line style="stroke: #A80036; stroke-width: 1.0;" x1="286.5" x2="286.5" y1="722.3203" y2="735.3203"></line><line style="stroke: #A80036; stroke-width: 1.0;" x1="245.5" x2="286.5" y1="735.3203" y2="735.3203"></line><polygon fill="#A80036" points="255.5,731.3203,245.5,735.3203,255.5,739.3203,251.5,735.3203" style="stroke: #A80036; stroke-width: 1.0;"></polygon><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="98" x="251.5" y="699.8555">Create and listen</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="87" x="251.5" y="716.8672">A random port</text><polygon fill="#A80036" points="149.5,762.332,139.5,766.332,149.5,770.332,145.5,766.332" style="stroke: #A80036; stroke-width: 1.0;"></polygon><line style="stroke: #A80036; stroke-width: 1.0;" x1="143.5" x2="243.5" y1="766.332" y2="766.332"></line><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="71" x="155.5" y="760.8789">Connect me</text><polygon fill="#A80036" points="232.5,793.3438,242.5,797.3438,232.5,801.3438,236.5,797.3438" style="stroke: #A80036; stroke-width: 1.0;"></polygon><line style="stroke: #A80036; stroke-width: 1.0;" x1="138.5" x2="238.5" y1="797.3438" y2="797.3438"></line><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="65" x="145.5" y="791.8906">connecting</text><polygon fill="#A80036" points="149.5,824.3555,139.5,828.3555,149.5,832.3555,145.5,828.3555" style="stroke: #A80036; stroke-width: 1.0;"></polygon><polygon fill="#A80036" points="344.5,824.3555,354.5,828.3555,344.5,832.3555,348.5,828.3555" style="stroke: #A80036; stroke-width: 1.0;"></polygon><line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 2.0,2.0;" x1="143.5" x2="350.5" y1="828.3555" y2="828.3555"></line><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="108" x="155.5" y="822.9023">Forwarding packet</text><polygon fill="#A80036" points="68,855.3672,58,859.3672,68,863.3672,64,859.3672" style="stroke: #A80036; stroke-width: 1.0;"></polygon><polygon fill="#A80036" points="232.5,855.3672,242.5,859.3672,232.5,863.3672,236.5,859.3672" style="stroke: #A80036; stroke-width: 1.0;"></polygon><line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 2.0,2.0;" x1="62" x2="238.5" y1="859.3672" y2="859.3672"></line><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="108" x="74" y="853.9141">Forwarding packet</text><!--
+@startuml
+actor localHTTP as h
+participant localTrav as l
+participant ServerTrav as s
+actor remoteCli as r
+group Handshake
+    l -> s: Hello
+    alt Successful decrypt
+        s-> l: OK. Num
+    else Failed in decrpting    
+        s -> l: NO.
+        l -> l: End connection
+    end
+end
+group Negotiation
+   l -> l: regen cryptor
+   l -> s: I want port 80
+   s -> s: Link l to port 80
+   alt Port is binded
+       s -> l: Failed
+       l -> l: End
+   else Port OK
+       s -> l: OK
+   end
+end
+
+group Traverse
+    r -> s: Get /
+    s->s: Create and listen\nA random port
+    s -> l: Connect me
+    l -> s: connecting
+    l <- -> r: Forwarding packet
+    h <- -> s: Forwarding packet
+end   
+@enduml
+
+PlantUML version 1.2018.08(Sun Jun 24 20:31:00 HKT 2018)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 1.8.0_172-b11
+Operating System: Linux
+OS Version: 4.17.6-1-ARCH
+Default Encoding: UTF-8
+Language: zh
+Country: CN
+--></g></svg></div>
+</div>
+
+    <div id="image-view-div" class="modal-box" style="display: none;">
+        <span id="image-view-close" class="modal-close">×</span>
+        <img id="image-view" class="modal-content">
+    </div>
+
+    <div id="preview-div" style="display: none;" class=""></div>
+
+    <div id="inplace-preview-div" style="display:none;"></div>
+
+    <div id="text-html-div" style="display:none;"></div>
+
+
+</body></html>

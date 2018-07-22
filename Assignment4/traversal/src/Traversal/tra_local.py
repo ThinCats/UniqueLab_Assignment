@@ -159,7 +159,7 @@ class LocalServer(object):
             logger.debug("Thread Exit")
 
 if __name__ == "__main__":
-    local_info = Info_local(1084, 1081, codes.REQUEST["FORWARD"], socket.AF_INET, socket.SOCK_STREAM, "127.0.0.1", 9899)
+    local_info = Info_local(8888, 1081, codes.REQUEST["FORWARD"], socket.AF_INET, socket.SOCK_STREAM, "47.106.22.242", 1080)
     server = LocalServer("127.0.0.1", 23333, "2333", local_info)
     server.start()
 
