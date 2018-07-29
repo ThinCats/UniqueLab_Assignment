@@ -12,6 +12,7 @@ class PlainText {
     public:
     PlainText(int init) {
     }
+    PlainText() = default;
     bool isText(char *ent_name, char *filepath);
     bool newIsText(char *filepath);
     int init(void);
@@ -19,7 +20,7 @@ class PlainText {
     private:
     magic_t cookie;
     static std::vector<std::string> ext_data;
-  
+    
 
 };
 

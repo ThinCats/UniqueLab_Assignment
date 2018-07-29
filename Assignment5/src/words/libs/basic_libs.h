@@ -8,6 +8,8 @@
 #include <string>
 #include <list>
 #include <queue>
+#include <utility>
+#include <algorithm>
 
 // FOR C POSIX
 extern "C" {

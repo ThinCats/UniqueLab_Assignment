@@ -64,3 +64,6 @@ int PlainText::init(void) {
 int PlainText::destruct(void) {
     magic_close(cookie);
 }
+
+
+

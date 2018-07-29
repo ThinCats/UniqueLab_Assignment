@@ -1,23 +1,7 @@
-#include "word_sort.h"
+#include "FileRead.h"
 
-// For using
-using std::cout;
-using std::ifstream;
-using std::string;
+int FileRead::iterFile(const std::string &dirpath, DirQueue_t &a_dirqueue) {
 
-int startSort(std::string &root_path) {
-
-  PlainText judger(1);
-  judger.init();
-
-  FileQueue all_files;
-  iterDirs(root_path, all_files, judger);
-  iterContent(all_files);
-  judger.destruct();
-  return 0;
-}
-int iterFile(std::string &dirpath, DirQueue &a_dirqueue, FileQueue &a_filequeue,
-             PlainText &judger) {
   // the DIR pointer
   DIR *dirp;
   struct dirent *ent_current;
@@ -66,18 +50,16 @@ int iterFile(std::string &dirpath, DirQueue &a_dirqueue, FileQueue &a_filequeue,
         // TODO: DO SOMTHING
 
         // Plain text should be handled
-        if (judger.isText(ent_current->d_name, full_file_path)) {
+        if (this->judger.isText(ent_current->d_name, full_file_path)) {
           // if(1) {
           // Put into a file_queue in orders
           // Then the indexer will get from the queue
           // use d_name for priority
           // a_filequeue.push(ent_current->d_name, dirpath_c, statbuf.st_mtime,
           // statbuf.st_ino); cout << "text " << full_file_path << std::endl;
-          a_filequeue.push_back(full_file_path);
+          this->all_files.push_back(full_file_path);
           // std::string path(full_file_path);
           // readFile(path);
-        } else {
-          cout << "Non text" << full_file_path << std::endl;
         }
         // Test:
       }
@@ -92,42 +74,24 @@ int iterFile(std::string &dirpath, DirQueue &a_dirqueue, FileQueue &a_filequeue,
     errMsg("Close dir falied");
   }
 
-  // Close Judger
+  return 0;
+
 }
 
-// I still use recursive to track dirs
-int iterDirs(std::string &parent_path, FileQueue &all_files,
-             PlainText &judger) {
-  DirQueue dir_queue;
+int FileRead::iterDirs(const std::string &parent_path) {
 
-  iterFile(parent_path, dir_queue, all_files, judger);
+  DirQueue_t dir_queue;
+  this->iterFile(parent_path, dir_queue);
 
   // Iter the dir_queue to access to subdir
   for (auto &a : dir_queue) {
-    iterDirs(a, all_files, judger);
+    iterDirs(a);
   }
 }
 
-int iterContent(FileQueue &all_files) {
+int readFile(const std::string &filepath, std::map<std::string, size_t>& word_dict) {
 
-  // The file id identical for each file;
-  // Iter each files:
-  // for(auto fileinfo: all_files) {
-  // readFile(fileinfo.filename);
-  // FileId determines the file display order
-  // }
-  std::map<std::string, size_t> word_count;
-
-  for (auto &a : all_files)
-    readFile(a, word_count);
-
-  // Assignment
-}
-
-// paterns
-int readFile(std::string &filepath, std::map<std::string, size_t> word_count) {
-
-  ifstream in_file(filepath, ifstream::in);
+  std::ifstream in_file(filepath, std::ifstream::in);
   if (!in_file) {
     errMsg("Can not read File:%s\n", filepath.c_str());
     return -1;
@@ -135,22 +99,26 @@ int readFile(std::string &filepath, std::map<std::string, size_t> word_count) {
   // Open successfully
   // Read the word
   char word[500];
-
   // For a single word
   char ch;
   int word_len = 0;
+  int word_count = 0;
 
-  while ((ch = record.get()) != EOF) {
-    if (isalnum(ch) || ch == '_') {
-      word[word_len++] = ch;
+  while ((ch = in_file.get()) != EOF) {
+    if (isalpha(ch)) {
+      word[word_len++] = tolower(ch);
     }
     // There is a break
     else if (word_len != 0) {
       word[word_len] = '\0';
-      // std::cout << word_str << std::endl;
-      word_count[word]++;
+      // word_count++;
+      // words_save.push_back(word);
+      word_dict[word]++;
 
       word_len = 0;
     }
   }
+  in_file.close();
+  return word_count;
+
 }
